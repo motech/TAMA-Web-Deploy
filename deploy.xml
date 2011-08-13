@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="tama" basedir=".">
+    <property file="${basedir}\settings\${env}\deploy.properties"/>
+    <condition property="script.interpreter" value="bash" else="cmd">
+        <os family="unix"/>
+    </condition>
+    <condition property="script.switch" value="/c" else="">
+        <not>
+            <os family="unix"/>
+        </not>
+    </condition>
+    <condition property="script.suffix" value="sh" else="bat">
+        <os family="unix"/>
+    </condition>
+    <!-- *********************** DOWNLOAD ARTIFACTS************************* -->
+    <target name="copy.tama.from.hudson">
+        <copy todir="${download.dir}" flatten="true">
+            <resources>
+                <url url="http://${hudson.server}:${hudson.server.port}/job/${hudson.job.name}/${hudson.build.number}/org.motechproject.tama$tama/artifact/org.motechproject.tama/tama/${hudson.release.version}/tama-${hudson.release.version}.war"/>
+            </resources>
+        </copy>
+        <move file="${download.dir}/tama-${hudson.release.version}.war" tofile="${download.dir}/${app_name}.war"/>
+    </target>
+   <target name="copy.tama.from.nexus">
+        <copy todir="${download.dir}" flatten="true">
+            <resources>
+                <url url="http://${nexus.server}:${nexus.server.port}/content/repositories/releases/org/motechproject/tama/${nexus.artifact.release.version}/tama-${nexus.release.version}.war"/>
+            </resources>
+        </copy>
+        <move file="${download.dir}/tama-${nexus.release.version}.war" tofile="${download.dir}/${app_name}.war"/>
+    </target>
+   <!-- *************************TOMCAT TARGETS************************* -->
+    <target name="copy.war.to.tomcat">
+        <echo message="Deploying to tomcat at ${tomcat.url} with tomcat home ${tomcat.home}"/>
+        <delete dir="${tomcat.home}/webapps/${app_name}"/>
+        <copy file="${war.file}" tofile="${tomcat.home}/webapps/${app_name}.war" overwrite="true"/>
+        <delete dir="${tomcat.home}/work/Catalina/localhost/${app_name}"/>
+    </target>
+    <target name="start.tomcat" depends="stop.tomcat">
+        <echo message="Starting tomcat..."/>
+        <echo message="Waiting for tomcat to start on ${tomcat.url}"/>
+        <exec executable="${script.interpreter}" dir="${tomcat.home}" spawn="true">
+            <arg line="${script.switch} ${tomcat.home}/bin/startup.${script.suffix}"/>
+        </exec>
+        <waitfor checkevery="100" checkeveryunit="millisecond" maxwait="2" maxwaitunit="minute"
+                 timeoutproperty="tomcat.timeout">
+            <http url="${tomcat.url}"/>
+        </waitfor>
+        <fail if="tomcat.timeout" message="Error starting up tomcat..."/>
+        <echo message="Tomcat started"/>
+    </target>
+    <target name="stop.tomcat" description="Stop Tomcat">
+        <echo message="Stopping tomcat..."/>
+        <echo message="Waiting for tomcat to stop on ${tomcat.url}"/>
+        <exec executable="${script.interpreter}" dir="${tomcat.home}" spawn="true">
+            <arg line="${script.switch} ${tomcat.home}/bin/shutdown.${script.suffix}"/>
+        </exec>
+        <waitfor checkevery="100" checkeveryunit="millisecond" maxwait="2" maxwaitunit="minute"
+                 timeoutproperty="tomcat.timeout">
+            <not>
+                <http url="${tomcat.url}"/>
+            </not>
+        </waitfor>
+        <fail if="tomcat.timeout" message="Error shutting down tomcat..."/>
+    </target>
+    <target name="clean.tomcat.logs" depends="stop.tomcat" description="Nuke all tomcat logs">
+        <delete failonerror="false">
+            <fileset dir="${tomcat.home}/logs" includes="*"/>
+        </delete>
+    </target>
+    <!-- *************************RECREATE COUCHDB************************* -->
+    <path id="libs">
+        <fileset dir="${tomcat.home}/webapps/${app_name}/WEB-INF/lib/" includes="**/*.jar"/>
+    </path>
+    <path id="dev.lib">
+        <fileset dir="../target/tama-0.1-SNAPSHOT/WEB-INF/lib" includes="**/*.jar"/>
+    </path>
+    <target name="load.seed.data">
+        <java fork="false" classname="${seed.main.class}">
+            <classpath>
+                <path location="${tomcat.home}/webapps/${app_name}/WEB-INF/classes"/>
+                <path refid="libs"/>
+            </classpath>
+        </java>
+        <echo message="seed data loaded"/>        
+    </target>
+      <target name="dev.load.seed.data">
+        <java fork="false" classname="${seed.main.class}">
+            <classpath>
+                <path location="../target/classes"/>
+                <path refid="dev.lib"/>
+            </classpath>
+        </java>
+        <echo message="seed data loaded"/>
+    </target>
+    <target name="drop.db">
+        <exec executable="curl">
+            <arg value="-X"/>
+            <arg value="DELETE"/>
+            <arg value="http://${db.server}:5984/${db.name}"/>
+        </exec>
+        <echo message="database dropped"/>
+    </target>
+    <!-- *************************RECREATE MYSQL************************* -->
+    <target name="load.quartz.schema">
+         <path id="dependencies">
+                <fileset file="./lib/mysql-connector-java-5.1.13.jar"/>
+         </path>
+         <sql driver="${mysql.driver}"
+              url="jdbc:mysql://${mysql.server}:${mysql.port}/${mysql.db}?autoReconnect=true"
+              userid="${mysql.user}"
+              classpathref="dependencies"
+              password="${mysql.password}">
+              drop database ${mysql.db};
+              create database ${mysql.db};
+         </sql>
+         <sql driver="${mysql.driver}"
+              url="jdbc:mysql://${mysql.server}:${mysql.port}/${mysql.db}?autoReconnect=true"
+              userid="${mysql.user}"
+              classpathref="dependencies"
+              password="${mysql.password}"
+              src="${project.basedir}/build/sql/tables_mysql_innodb.sql">
+         </sql>          
+    </target>
+    <!-- *************************DEPLOY TARGETS************************* -->
+    <target name="deploy.tama.from.hudson.and.reset.db" depends="stop.tomcat, drop.db, copy.war.to.tomcat.from.hudson, start.tomcat, load.seed.data, load.quartz.schema"
+            description="Deploy TAMA by 
+                         1) fetching artifact from Hudson, 
+                         2) recreate tama-web couchdb database with seed data
+                         3) clearing quartz mysql jobdatastore"/>
+
+    <target name="deploy.tama.from.nexus.and.reset.db" depends="stop.tomcat, drop.db, copy.war.to.tomcat.from.nexus, start.tomcat, load.seed.data, load.quartz.schema"
+            description="Deploy TAMA by 
+                         1) fetching artifact from Nexus, 
+                         2) recreate tama-web couchdb database with seed data
+                         3) clearing quartz mysql jobdatastore"/>
+
+    <target name="deploy.tama" depends="stop.tomcat,copy.war.to.tomcat,start.tomcat"
+            description="Deploy TAMA without recreating database and seed data"/>
+</project>
