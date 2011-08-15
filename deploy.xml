@@ -35,7 +35,7 @@
     <target name="copy.tama.to.tomcat">
         <echo message="Deploying to tomcat at ${tomcat.url} with tomcat home ${tomcat.home}"/>
         <delete dir="${tomcat.home}/webapps/${app.name}"/>
-        <copy file="${app.name}.war" tofile="${tomcat.home}/webapps/${app.name}.war" overwrite="true"/>
+        <copy file="${download.dir}/${app.name}.war" tofile="${tomcat.home}/webapps/${app.name}.war" overwrite="true"/>
         <delete dir="${tomcat.home}/work/Catalina/localhost/${app.name}"/>
     </target>
     <target name="start.tomcat" depends="stop.tomcat">
