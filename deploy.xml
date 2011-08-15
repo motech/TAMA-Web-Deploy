@@ -50,7 +50,7 @@
         <fail if="tomcat.timeout" message="Error starting up tomcat..."/>
         <echo message="tomcat started"/>
     </target>
-    <target name="stop.tomcat" description="Stop Tomcat">
+    <target name="stop.tomcat" description="stop tomcat">
         <echo message="Stopping tomcat..."/>
         <echo message="Waiting for tomcat to stop on ${tomcat.url}"/>
         <exec executable="${script.interpreter}" dir="${tomcat.home}" spawn="true">
@@ -61,6 +61,24 @@
         </waitfor>
         <fail if="tomcat.timeout" message="Error shutting down tomcat..."/>
         <echo message="tomcat stopped"/>
+    </target>
+    <target name="restart.tomcat" description="restart tomcat">
+        <echo message="restarting tomcat..."/>       
+        <exec executable="${script.interpreter}" dir="${tomcat.home}" spawn="true">
+            <arg line="${script.switch} ${tomcat.home}/bin/shutdown.${script.suffix}"/>
+        </exec>
+        <waitfor checkevery="100" checkeveryunit="millisecond" maxwait="2" maxwaitunit="minute" timeoutproperty="tomcat.timeout">
+            <not><http url="${tomcat.url}"/></not>
+        </waitfor>
+        <fail if="tomcat.timeout" message="Error shutting down tomcat..."/>       
+        <exec executable="${script.interpreter}" dir="${tomcat.home}" spawn="true">
+            <arg line="${script.switch} ${tomcat.home}/bin/startup.${script.suffix}"/>
+        </exec>
+        <waitfor checkevery="100" checkeveryunit="millisecond" maxwait="2" maxwaitunit="minute" timeoutproperty="tomcat.timeout">
+            <http url="${tomcat.url}"/>
+        </waitfor>
+        <fail if="tomcat.timeout" message="Error starting up tomcat..."/>
+        <echo message="tomcat restarted"/>
     </target>
     <target name="clean.tomcat.logs" depends="stop.tomcat" description="Nuke all tomcat logs">
         <delete failonerror="false">
@@ -142,30 +160,30 @@
 								 download.tama.from.hudson, 
 								 copy.tama.to.tomcat, 
 								 start.tomcat, 
-								 load.seed.data, 
-								 stop.tomcat, 
+								 load.seed.data, 								
 								 set.properties, 
 								 load.quartz.schema, 
-								 start.tomcat"
+								 restart.tomcat"
             description="Deploy TAMA by 
                          1) fetching artifact from hudson, 
                          2) recreate tama-web couchdb database with seed data
-                         3) clearing quartz mysql jobdatastore"/>
+                         3) clearing quartz mysql jobdatastore
+			 4) set properties for war"/>
 
     <target name="deploy.tama.from.nexus.and.reset.db" depends="stop.tomcat, 
-             							 drop.db, 
-								 download.tama.from.nexus, 
-								 copy.tama.to.tomcat, 
-								 start.tomcat, 
-								 load.seed.data, 
-								 stop.tomcat, 
-								 set.properties, 
-								 load.quartz.schema, 
-								 start.tomcat"
+             							drop.db, 
+								download.tama.from.nexus, 
+								copy.tama.to.tomcat, 
+								start.tomcat, 
+								load.seed.data,								 
+								set.properties, 
+								load.quartz.schema, 
+								restart.tomcat"
             description="Deploy TAMA by 
                          1) fetching artifact from nexus, 
                          2) recreate tama-web couchdb database with seed data
-                         3) clearing quartz mysql jobdatastore"/>
+                         3) clearing quartz mysql jobdatastore
+                         4) set properties for war"/>
 
     <target name="deploy.tama.from.hudson" depends="stop.tomcat, 
  						    download.tama.from.hudson, 
