@@ -14,7 +14,7 @@
     </condition>
     <!-- *********************** DOWNLOAD ARTIFACTS************************* -->
     <target name="download.tama.from.hudson">
-        <copy todir="${download.dir}" flatten="true">
+        <copy todir="${download.dir}" flatten="true" overwrite="true">
             <resources>
                <url url="http://${hudson.server}:${hudson.port}/job/${hudson.job.name}/${hudson.build.number}/org.motechproject.tama$tama/artifact/org.motechproject.tama/tama/${hudson.release.version}/tama-${hudson.release.version}.war"/>
             </resources>
@@ -23,7 +23,7 @@
         <echo message="downloaded tama-${hudson.release.version}.war from hudson"/> 
     </target>
    <target name="download.tama.from.nexus">
-        <copy todir="${download.dir}" flatten="true">
+        <copy todir="${download.dir}" flatten="true" overwrite="true">
             <resources>
                 <url url="http://${nexus.server}:${nexus.port}/content/repositories/releases/org/motechproject/tama/${nexus.release.version}/tama-${nexus.release.version}.war"/>
             </resources>
@@ -35,7 +35,7 @@
     <target name="copy.tama.to.tomcat">
         <echo message="Deploying to tomcat at ${tomcat.url} with tomcat home ${tomcat.home}"/>
         <delete dir="${tomcat.home}/webapps/${app.name}"/>
-        <copy file="${war.file}" tofile="${tomcat.home}/webapps/${app.name}.war" overwrite="true"/>
+        <copy file="${app.name}.war" tofile="${tomcat.home}/webapps/${app.name}.war" overwrite="true"/>
         <delete dir="${tomcat.home}/work/Catalina/localhost/${app.name}"/>
     </target>
     <target name="start.tomcat" depends="stop.tomcat">
