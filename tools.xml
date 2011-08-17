@@ -4,7 +4,7 @@
     <property file="${basedir}/properties/${env}/deploy.properties"/>
 
     <path id="libs">
-        <fileset dir="${tomcat.home}/webapps/${app_name}/WEB-INF/lib/" includes="**/*.jar"/>
+        <fileset dir="${tomcat.home}/webapps/${app.name}/WEB-INF/lib/" includes="**/*.jar"/>
     </path>
 
     <target name="setup.adherence.logs">
@@ -15,7 +15,7 @@
             <arg line="${toDate}"/>
             <arg line="${nthDosageThatWillNotBeTaken}"/>
             <classpath>
-                <path location="${tomcat.home}/webapps/${app_name}/WEB-INF/classes"/>
+                <path location="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"/>
                 <path refid="libs"/>
             </classpath>
         </java>
