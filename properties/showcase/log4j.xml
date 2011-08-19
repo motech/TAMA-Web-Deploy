@@ -18,6 +18,9 @@
     </logger>
     <logger name="org.apache">
         <level value="error"/>
+    </logger>
+    <logger name="org.quartz">
+        <level value="error"/>
     </logger>	
     <logger name="org.motechproject">
         <level value="info"/>
