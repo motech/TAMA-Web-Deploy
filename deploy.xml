@@ -102,7 +102,7 @@
     <!-- *************************RECREATE COUCHDB************************* -->
 
      <path id="lib.path">
-        <fileset dir="${webinf.lib}" includes="**/*.jar"/>
+        <fileset dir="${tomcat.home}/webapps/${app.name}/WEB-INF/lib" includes="**/*.jar"/>
     </path>
 
     <target name="load.seed.data">
