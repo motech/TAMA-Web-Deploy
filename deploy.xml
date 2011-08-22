@@ -215,21 +215,34 @@
 
     <target name="deploy.tama.from.hudson" depends="stop.tomcat, 
  						    download.tama.from.hudson, 
-						    copy.tama.to.tomcat, 
+						    copy.tama.to.tomcat,
+						    start.tomcat, 
 						    set.properties, 
-						    start.tomcat"
+						    restart.tomcat"
             description="Deploy TAMA from hudson without recreating database and seed data"/>
 
     <target name="deploy.tama.from.nexus" depends="stop.tomcat, 
 						   download.tama.from.nexus, 
 						   copy.tama.to.tomcat, 
- 						   set.properties, 
-						   start.tomcat"
+ 						   start.tomcat, 
+						   set.properties, 
+						   restart.tomcat"
             description="Deploy TAMA from nexus without recreating database and seed data"/>
 
     <target name="deploy.tama.from.local" depends="stop.tomcat, 
 					  	   copy.local.war,
- 						   set.properties, 
-						   start.tomcat"
-            description="Deploy TAMA from nexus without recreating database and seed data"/>
+ 						   start.tomcat, 
+						   set.properties, 
+						   restart.tomcat"
+            description="Deploy TAMA from locally downloaded war(set 'local.war.file' in deploy.properties) in artifacts folder without recreating database and seed data"/>
+
+    <target name="deploy.tama.from.local.and.reset.db" depends="stop.tomcat, 
+					  	   copy.local.war,
+ 						   start.tomcat,
+						   load.seed.data,								 
+						   set.properties, 
+						   load.quartz.schema,
+						   restart.tomcat"
+            description="Deploy TAMA from locally downloaded war(set 'local.war.file' in deploy.properties) in artifacts folder. Also recreates the TAMA database."/>
+
 </project>
