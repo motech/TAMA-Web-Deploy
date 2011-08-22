@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="tama" basedir=".">
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="lib/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+
     <property file="${basedir}/properties/${env}/deploy.properties"/>
     <condition property="script.interpreter" value="bash" else="cmd">
         <os family="unix"/>
