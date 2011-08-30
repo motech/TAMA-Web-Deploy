@@ -246,7 +246,8 @@
 						   restart.tomcat"
             description="Deploy TAMA from locally downloaded war(set 'local.war.file' in deploy.properties) in artifacts folder without recreating database and seed data"/>
 
-    <target name="deploy.tama.from.local.and.reset.db" depends="stop.tomcat, 
+    <target name="deploy.tama.from.local.and.reset.db" depends="stop.tomcat,
+                                                   drop.db,
 					  	   copy.local.war,
  						   start.tomcat,
 						   load.seed.data,								 
