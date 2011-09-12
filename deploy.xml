@@ -126,20 +126,26 @@
                 <path refid="lib.path"/>
             </classpath>
         </java>
-
+        <echo message="seed data loaded into ${couchdb.tama.db.name} database"/>
         <if>
             <equals arg1="${audio.seed.load}" arg2="true"/>
             <then>
                 <antcall target="load.audio.seed"/>
             </then>
-        </if>
-
-        <echo message="seed data loaded into ${couchdb.db.name} database"/>
+        </if>        
     </target>
 
     <target name="load.audio.seed">
+    	<exec executable="curl">
+            <arg value="-s"/>
+            <arg value="-S"/>
+            <arg value="-X"/>
+            <arg value="DELETE"/>
+            <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.platform.cmslite.db.name}"/>
+        </exec>
+        <echo message="${couchdb.platform.cmslite.db.name} database dropped from couchdb server"/>
         <echo message="Loading Audio Seed.."/>
-        <java fork="false" classname="${audio.seed.loader.class}">
+        <java fork="false" classname="${couchdb.seed.audio.main.class}">
             <classpath>
                 <path location="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"/>
                 <path refid="lib.path"/>
@@ -148,15 +154,41 @@
         <echo message="audio seed loaded into database"/>
     </target>
 
-    <target name="drop.db">
+    <target name="drop.tama.db">
         <exec executable="curl">
             <arg value="-s"/>
             <arg value="-S"/>
             <arg value="-X"/>
             <arg value="DELETE"/>
-            <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.db.name}"/>
+            <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.tama.db.name}"/>
         </exec>
-        <echo message="${couchdb.db.name} database dropped from couchdb server"/>
+        <echo message="${couchdb.tama.db.name} database dropped from couchdb server"/>
+    </target>
+    <target name="drop.platform.db">        
+        <exec executable="curl">
+            <arg value="-s"/>
+            <arg value="-S"/>
+            <arg value="-X"/>
+            <arg value="DELETE"/>
+            <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.platform.pillreminder.db.name}"/>
+        </exec>
+        <echo message="${couchdb.platform.pillreminder.db.name} database dropped from couchdb server"/>
+        <exec executable="curl">
+            <arg value="-s"/>
+            <arg value="-S"/>
+            <arg value="-X"/>
+            <arg value="DELETE"/>
+            <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.platform.trees.db.name}"/>
+        </exec>
+        <echo message="${couchdb.platform.trees.db.name} database dropped from couchdb server"/>
+        <exec executable="curl">
+            <arg value="-s"/>
+            <arg value="-S"/>
+            <arg value="-X"/>
+            <arg value="DELETE"/>
+            <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.platform.rules.db.name}"/>
+        </exec>
+        <echo message="${couchdb.platform.rules.db.name} database dropped from couchdb server"/>
     </target>
     <!-- *************************RECREATE MYSQL************************* -->
     <target name="load.quartz.schema">
@@ -211,7 +243,8 @@
     </target>	
     <!-- *************************DEPLOY TARGETS************************* -->
     <target name="deploy.tama.from.hudson.and.reset.db" depends="stop.tomcat, 
-             							 drop.db, 
+             							 drop.tama.db, 
+             							 drop.platform.db,
 								 download.tama.from.hudson, 
 								 copy.tama.to.tomcat, 
 								 start.tomcat, 
@@ -227,7 +260,8 @@
 			 4) set properties for war"/>
 
     <target name="deploy.tama.from.nexus.and.reset.db" depends="stop.tomcat, 
-             							drop.db, 
+             							drop.tama.db, 
+             							drop.platform.db,
 								download.tama.from.nexus, 
 								copy.tama.to.tomcat, 
 								start.tomcat, 
@@ -268,7 +302,8 @@
             description="Deploy TAMA from locally downloaded war(set 'local.war.file' in deploy.properties) in artifacts folder without recreating database and seed data"/>
 
     <target name="deploy.tama.from.local.and.reset.db" depends="stop.tomcat,
-                                                   drop.db,
+                                                   drop.tama.db,
+                                                   drop.platform.db,
 					  	   copy.local.war,
  						   start.tomcat,
 						   load.seed.data,								 
