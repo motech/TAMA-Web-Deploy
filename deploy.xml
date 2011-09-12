@@ -162,7 +162,6 @@
             <arg value="DELETE"/>
             <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.tama.db.name}"/>
         </exec>
-        <echo message="${couchdb.tama.db.name} database dropped from couchdb server"/>
     </target>
     <target name="drop.platform.db">        
         <exec executable="curl">
@@ -172,7 +171,6 @@
             <arg value="DELETE"/>
             <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.platform.pillreminder.db.name}"/>
         </exec>
-        <echo message="${couchdb.platform.pillreminder.db.name} database dropped from couchdb server"/>
         <exec executable="curl">
             <arg value="-s"/>
             <arg value="-S"/>
@@ -180,7 +178,6 @@
             <arg value="DELETE"/>
             <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.platform.trees.db.name}"/>
         </exec>
-        <echo message="${couchdb.platform.trees.db.name} database dropped from couchdb server"/>
         <exec executable="curl">
             <arg value="-s"/>
             <arg value="-S"/>
@@ -188,7 +185,6 @@
             <arg value="DELETE"/>
             <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.platform.rules.db.name}"/>
         </exec>
-        <echo message="${couchdb.platform.rules.db.name} database dropped from couchdb server"/>
     </target>
     <!-- *************************RECREATE MYSQL************************* -->
     <target name="load.quartz.schema">
@@ -245,13 +241,13 @@
     <target name="deploy.tama.from.hudson.and.reset.db" depends="stop.tomcat, 
              							 drop.tama.db, 
              							 drop.platform.db,
+             							 load.quartz.schema, 
 								 download.tama.from.hudson, 
 								 copy.tama.to.tomcat, 
 								 start.tomcat, 
 								 load.seed.data, 								
 								 set.properties, 
-								 set.hudson.version,
-								 load.quartz.schema, 
+								 set.hudson.version,								 
 								 restart.tomcat"
             description="Deploy TAMA by 
                          1) fetching artifact from hudson, 
@@ -262,13 +258,13 @@
     <target name="deploy.tama.from.nexus.and.reset.db" depends="stop.tomcat, 
              							drop.tama.db, 
              							drop.platform.db,
+             							load.quartz.schema, 
 								download.tama.from.nexus, 
 								copy.tama.to.tomcat, 
 								start.tomcat, 
 								load.seed.data,								 
 								set.properties, 
 								set.nexus.version,
-								load.quartz.schema, 
 								restart.tomcat"
             description="Deploy TAMA by 
                          1) fetching artifact from nexus, 
@@ -304,11 +300,11 @@
     <target name="deploy.tama.from.local.and.reset.db" depends="stop.tomcat,
                                                    drop.tama.db,
                                                    drop.platform.db,
+                                                   load.quartz.schema, 
 					  	   copy.local.war,
  						   start.tomcat,
 						   load.seed.data,								 
 						   set.properties, 
-						   load.quartz.schema,
 						   restart.tomcat"
             description="Deploy TAMA from locally downloaded war(set 'local.war.file' in deploy.properties) in artifacts folder. Also recreates the TAMA database."/>
 
