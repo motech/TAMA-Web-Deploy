@@ -135,7 +135,7 @@
         </if>        
     </target>
 
-    <target name="setup.outbox.message">
+    <target name="setup.outbox.messages">
         <echo message="Loading outbox messages for patient 1111 ..."/>
         <java fork="false" classname="${outboxmessage.setup.main.class}">
             <classpath>
