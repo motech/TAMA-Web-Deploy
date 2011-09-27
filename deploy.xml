@@ -135,6 +135,16 @@
         </if>        
     </target>
 
+    <target name="setup.outbox.message">
+        <echo message="Loading outbox messages for patient 1111 ..."/>
+        <java fork="false" classname="${outboxmessage.setup.main.class}">
+            <classpath>
+                <path location="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"/>
+                <path refid="lib.path"/>
+            </classpath>
+        </java>
+    </target>
+
     <target name="load.audio.seed">
     	<exec executable="curl">
             <arg value="-s"/>
