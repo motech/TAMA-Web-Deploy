@@ -8,17 +8,24 @@
     </path>
 
     <target name="setup.adherence.logs">
-        <java fork="false" classname="${main.class}">
-            <arg line="${patientId}"/>
-            <arg line="${regimenId}"/>
-            <arg line="${dosageId}"/>
-            <arg line="${fromDate}"/>
-            <arg line="${toDate}"/>
-            <arg line="${nthDosageThatWillNotBeTaken}"/>
+        <java fork="false" classname="${adherenceLogs.mainClass}">
+            <arg line="${adherenceLogs.patientId}"/>
+            <arg line="${adherenceLogs.regimenId}"/>
+            <arg line="${adherenceLogs.dosageId}"/>
+            <arg line="${adherenceLogs.fromDate}"/>
+            <arg line="${adherenceLogs.toDate}"/>
+            <arg line="${adherenceLogs.nthDosageThatWillNotBeTaken}"/>
             <classpath>
                 <path location="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"/>
                 <path refid="libs"/>
             </classpath>
+        </java>
+    </target>
+
+    <target name="setup.outbox.messages">
+        <java fork="false" classname="${outboxMessages.mainClass}">
+            <arg line="${outboxMessages.patientId}"/>
+            <arg line="${outboxMessages.messageCount}"/>
         </java>
     </target>
 </project>
