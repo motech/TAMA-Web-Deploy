@@ -23,9 +23,13 @@
     </target>
 
     <target name="setup.outbox.messages">
-        <java fork="false" classname="${outboxMessages.mainClass}">
-            <arg line="${outboxMessages.patientId}"/>
-            <arg line="${outboxMessages.messageCount}"/>
+        <echo message="Loading outbox messages..."/>
+        <java fork="false" classname="${outboxmessage.setup.main.class}">
+            <classpath>
+                <path location="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"/>
+                <path refid="lib.path"/>
+            </classpath>
+            <arg line="${params}"></arg>
         </java>
     </target>
 </project>
