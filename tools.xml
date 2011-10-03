@@ -27,7 +27,7 @@
         <java fork="false" classname="${outboxmessage.setup.main.class}">
             <classpath>
                 <path location="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"/>
-                <path refid="lib.path"/>
+                <path refid="libs"/>
             </classpath>
             <arg line="${params}"></arg>
         </java>
