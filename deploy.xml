@@ -154,38 +154,21 @@
         <echo message="audio seed loaded into database"/>
     </target>
 
-    <target name="drop.tama.db">
+    <target name="drop.couch.db">
+        <echo message="dropping database:${dbname}"/>	
         <exec executable="curl">
             <arg value="-s"/>
             <arg value="-S"/>
             <arg value="-X"/>
             <arg value="DELETE"/>
-            <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.tama.db.name}"/>
+            <arg value="http://${couchdb.server}:${couchdb.port}/${dbname}"/>
         </exec>
     </target>
-    <target name="drop.platform.db">        
-        <exec executable="curl">
-            <arg value="-s"/>
-            <arg value="-S"/>
-            <arg value="-X"/>
-            <arg value="DELETE"/>
-            <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.platform.pillreminder.db.name}"/>
-        </exec>
-        <exec executable="curl">
-            <arg value="-s"/>
-            <arg value="-S"/>
-            <arg value="-X"/>
-            <arg value="DELETE"/>
-            <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.platform.trees.db.name}"/>
-        </exec>
-        <exec executable="curl">
-            <arg value="-s"/>
-            <arg value="-S"/>
-            <arg value="-X"/>
-            <arg value="DELETE"/>
-            <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.platform.rules.db.name}"/>
-        </exec>
+
+    <target name="drop.all.dbs">
+		<foreach list="${couchdb.all.dbs}" target="drop.couch.db" param="dbname" />
     </target>
+	
     <!-- *************************RECREATE MYSQL************************* -->
     <target name="load.quartz.schema">
         <path id="dependencies">
@@ -239,8 +222,7 @@
     </target>	
     <!-- *************************DEPLOY TARGETS************************* -->
     <target name="deploy.tama.from.hudson.and.reset.db" depends="stop.tomcat, 
-             							 drop.tama.db, 
-             							 drop.platform.db,
+             							 drop.all.dbs, 
              							 load.quartz.schema, 
 								 download.tama.from.hudson, 
 								 copy.tama.to.tomcat, 
@@ -256,8 +238,7 @@
 			 4) set properties for war"/>
 
     <target name="deploy.tama.from.nexus.and.reset.db" depends="stop.tomcat, 
-             							drop.tama.db, 
-             							drop.platform.db,
+             							drop.all.dbs, 
              							load.quartz.schema, 
 								download.tama.from.nexus, 
 								copy.tama.to.tomcat, 
@@ -298,8 +279,7 @@
             description="Deploy TAMA from locally downloaded war(set 'local.war.file' in deploy.properties) in artifacts folder without recreating database and seed data"/>
 
     <target name="deploy.tama.from.local.and.reset.db" depends="stop.tomcat,
-                                                   drop.tama.db,
-                                                   drop.platform.db,
+                                                   drop.all.dbs,
                                                    load.quartz.schema, 
 					  	   copy.local.war,
  						   start.tomcat,
