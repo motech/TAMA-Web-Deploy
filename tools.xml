@@ -10,8 +10,6 @@
     <target name="setup.adherence.logs">
         <java fork="false" classname="${adherenceLogs.mainClass}">
             <arg line="${adherenceLogs.patientId}"/>
-            <arg line="${adherenceLogs.regimenId}"/>
-            <arg line="${adherenceLogs.dosageId}"/>
             <arg line="${adherenceLogs.fromDate}"/>
             <arg line="${adherenceLogs.toDate}"/>
             <arg line="${adherenceLogs.nthDosageThatWillNotBeTaken}"/>
