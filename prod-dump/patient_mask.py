@@ -12,6 +12,7 @@ for id in db:
 	if "documentType" in doc and doc["documentType"] == "Patient":
 		doc["mobilePhoneNumber"] = "000000" + doc["mobilePhoneNumber"][ len(doc["mobilePhoneNumber"]) - 4 : ]
 		doc["patientPreferences"]["passcode"] = "0000"
+		doc["status"] = "Inactive"
 		db[doc.id] = doc
 	if "documentType" in doc and doc["documentType"] == "UniquePatientField":
 		old_doc = doc
