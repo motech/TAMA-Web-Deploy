@@ -4,11 +4,7 @@ if [ $# -lt 1 ]; then echo "Usage $0 <target-directory>"; exit; fi
 
 mkdir -p $1
 
-export AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY_ID>
-export AWS_SECRET_ACCESS_KEY=<AWS_SECRET_ACCESS_KEY>
-export PASSPHRASE=<PASSPHRASE>
-GPG_KEY=<GPG_KEY>
-S3_BUCKET=<S3_BUCKET>
+source ../../prod-deploy-properties/prod.properties
 
 # The destination
 DEST=s3+http://$S3_BUCKET
