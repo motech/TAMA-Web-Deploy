@@ -3,11 +3,11 @@
 if [ $# -lt 1 ]; then echo "Usage $0 <source-directory>"; exit; fi
 
 # Export some ENV variables so you don't have to type anything
-export AWS_ACCESS_KEY_ID=AKIAJINWYVHMJ4U7FKAA
-export AWS_SECRET_ACCESS_KEY=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
-export PASSPHRASE=amat
-GPG_KEY=BED50DF2
-S3_BUCKET=tama-nightly-backups
+export AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY_ID>
+export AWS_SECRET_ACCESS_KEY=<AWS_SECRET_ACCESS_KEY>
+export PASSPHRASE=<PASSPHRASE>
+GPG_KEY=<GPG_KEY>
+S3_BUCKET=<S3_BUCKET>
 
 # The source of your backup
 SOURCE=$1
