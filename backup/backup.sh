@@ -28,6 +28,7 @@ cp -fR /var/lib/couchdb $WORK/couchdb >> $DAILYLOGFILE
 
 cp -fR $MQ_HOME/data/kahadb $WORK/kahadb >> $DAILYLOGFILE
 
+cd /home/tamasuper/deploy/TAMA-Web-Deploy/backup
 ./upload.sh $WORK >> $DAILYLOGFILE
 
 /etc/init.d/couchdb start >> $DAILYLOGFILE
