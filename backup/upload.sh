@@ -22,6 +22,6 @@ duplicity \
 echo done.
 
 # Reset the ENV variables. Don't need them sitting around
-unset export AWS_ACCESS_KEY_ID
-unset export AWS_SECRET_ACCESS_KEY
-unset export PASSPHRASE
+unset AWS_ACCESS_KEY_ID
+unset AWS_SECRET_ACCESS_KEY
+unset PASSPHRASE
