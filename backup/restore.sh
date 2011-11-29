@@ -15,6 +15,6 @@ duplicity \
     $DEST $1
 
 # Reset the ENV variables. Don't need them sitting around
-export AWS_ACCESS_KEY_ID=
-export AWS_SECRET_ACCESS_KEY=
-export PASSPHRASE=
+unset AWS_ACCESS_KEY_ID
+unset AWS_SECRET_ACCESS_KEY
+unset PASSPHRASE
