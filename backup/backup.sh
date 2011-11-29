@@ -19,14 +19,14 @@ trace () {
 /etc/init.d/activemq stop >> $DAILYLOGFILE
 /etc/init.d/couchdb stop >> $DAILYLOGFILE
 
-WORK=temp
+WORK=/var/tmp/tama-backup
 mkdir -p $WORK
 
 mysqldump --all-databases -uroot -ppassword > $WORK/mysql.sql 2>> $DAILYLOGFILE
 
-cp -fR /var/lib/couchdb $WORK/couchdb >> $DAILYLOGFILE
+cp -fR /var/lib/couchdb/ $WORK/couchdb >> $DAILYLOGFILE
 
-cp -fR $MQ_HOME/data/kahadb $WORK/kahadb >> $DAILYLOGFILE
+cp -fR $MQ_HOME/data/kahadb/ $WORK/kahadb >> $DAILYLOGFILE
 
 cd /home/tamasuper/deploy/TAMA-Web-Deploy/backup
 ./upload.sh $WORK >> $DAILYLOGFILE
