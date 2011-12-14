@@ -205,6 +205,8 @@
               file="${basedir}/properties/${env}/log4j.xml"/>
         <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes/META-INF/spring"
               file="${basedir}/properties/${env}/tama.properties"/>
+        <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
+              file="${basedir}/properties/${env}/placeholderPluginContext.xml"/>
     </target>
     <target name="set.hudson.version">
     	<echo file="${tomcat.home}/webapps/${app.name}/META-INF/version.txt">
