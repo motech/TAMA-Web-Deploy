@@ -1,4 +1,3 @@
-cp date.properties $1/webapps/tama/WEB-INF/classes
 cp placeholderPluginContext.xml $1/webapps/tama/WEB-INF/classes
 cp ../../motech-delivery-tools/motech-datetime-simulator/target/motech-datetime-simulator-0.3-SNAPSHOT.jar $1/webapps/tama/WEB-INF/lib
 cp ../../motech-delivery-tools/motech-job-handler-invoker/target/motech-job-handler-invoker-0.3-SNAPSHOT.jar $1/webapps/tama/WEB-INF/lib
