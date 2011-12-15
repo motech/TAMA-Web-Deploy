@@ -205,9 +205,15 @@
               file="${basedir}/properties/${env}/log4j.xml"/>
         <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes/META-INF/spring"
               file="${basedir}/properties/${env}/tama.properties"/>
+	<antcall target="unwire.schedule.job.controller"/>
+    </target>
+
+    <target name="unwire.schedule.job.controller">
+        <delete failonerror="false" file="${tomcat.home}/webapps/${app.name}/WEB-INF/lib/motech-job-handler-invoker.jar"/>
         <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
               file="${basedir}/properties/${env}/placeholderPluginContext.xml"/>
     </target>
+
     <target name="set.hudson.version">
     	<echo file="${tomcat.home}/webapps/${app.name}/META-INF/version.txt">
     	hudson.release.version=${hudson.release.version}
