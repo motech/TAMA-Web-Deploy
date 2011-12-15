@@ -209,7 +209,9 @@
     </target>
 
     <target name="unwire.schedule.job.controller">
-        <delete failonerror="false" file="${tomcat.home}/webapps/${app.name}/WEB-INF/lib/motech-job-handler-invoker*.jar"/>
+ 	 <delete failonerror="false">
+            <fileset dir="${tomcat.home}/webapps/${app.name}/WEB-INF/lib" includes="motech-job-handler-invoker*"/>
+        </delete>
         <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
               file="${basedir}/properties/${env}/placeholderPluginContext.xml"/>
     </target>
