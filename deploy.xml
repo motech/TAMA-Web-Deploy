@@ -7,7 +7,12 @@
         </classpath>
     </taskdef>
 
-    <typedef file="org/motechproject/build/deployMacroDefs.xml"/>
+    <typedef resource="org/motechproject/build/deployMacroDefs.xml">
+        <classpath>
+            <pathelement location="lib/motech-delivery-ops-0.3-SNAPSHOT.jar"/>
+        </classpath>
+    </typedef>
+
     <property file="${basedir}/properties/${env}/deploy.properties"/>
 
     <!-- *********************** DOWNLOAD ARTIFACTS************************* -->
