@@ -12,12 +12,14 @@
 
     <!-- *********************** DOWNLOAD ARTIFACTS************************* -->
     <target name="download.tama.from.hudson">
-        <copy todir="${download.dir}" flatten="true" overwrite="true">
-            <resources>
-                <url url="http://${hudson.server}:${hudson.port}/job/${hudson.job.name}/${hudson.build.number}/org.motechproject.tama$tama/artifact/org.motechproject.tama/tama/${hudson.release.version}/tama-${hudson.release.version}.war"/>
-            </resources>
-        </copy>
-        <move file="${download.dir}/tama-${hudson.release.version}.war" tofile="${download.dir}/${app.name}.war"/>
+        <exec executable="${script.interpreter}" failonerror="true" >
+			<arg file="${basedir}/scripts/download_artifact.sh"/>
+			<arg value="http://${hudson.server}:${hudson.port}/j_acegi_security_check" /> 
+			<arg value="http://${hudson.server}:${hudson.port}/job/${hudson.job.name}/${hudson.build.number}/org.motechproject.tama$tama/artifact/org.motechproject.tama/tama/${hudson.release.version}/tama-${hudson.release.version}.war" /> 
+			<arg value="${download.dir}/${app.name}.war"/>
+			<arg value="${hudson.username}"/>
+			<arg value="${hudson.password}"/>	
+        </exec>
         <echo message="downloaded tama-${hudson.release.version}.war from hudson"/>
     </target>
 
