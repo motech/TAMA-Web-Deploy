@@ -1,26 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="tama" basedir=".">
+
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
             <pathelement location="lib/ant-contrib-1.0b3.jar"/>
         </classpath>
     </taskdef>
 
+    <typedef file="org/motechproject/build/deployMacroDefs.xml"/>
     <property file="${basedir}/properties/${env}/deploy.properties"/>
-    <condition property="script.interpreter" value="bash" else="cmd">
-        <os family="unix"/>
-    </condition>
-    <condition property="script.switch" value="/c" else="">
-        <not>
-            <os family="unix"/>
-        </not>
-    </condition>
-    <condition property="script.suffix" value="sh" else="bat">
-        <os family="unix"/>
-    </condition>
-    <tstamp>
-        <format property="cctimestamp" pattern="yyyy-MM-dd HH:mm:ss"/>
-    </tstamp>
+
     <!-- *********************** DOWNLOAD ARTIFACTS************************* -->
     <target name="download.tama.from.hudson">
         <copy todir="${download.dir}" flatten="true" overwrite="true">
@@ -41,12 +30,9 @@
         <move file="${download.dir}/tama-${nexus.release.version}.war" tofile="${download.dir}/${app.name}.war"/>
         <echo message="downloaded tama-${nexus.release.version}.war from nexus"/>
     </target>
-    <!-- *************************PLAY WITH TOMCAT************************* -->
+
     <target name="copy.tama.to.tomcat">
-        <echo message="Deploying to tomcat at ${tomcat.url} with tomcat home ${tomcat.home}"/>
-        <delete dir="${tomcat.home}/webapps/${app.name}"/>
-        <copy file="${download.dir}/${app.name}.war" tofile="${tomcat.home}/webapps/${app.name}.war" overwrite="true"/>
-        <delete dir="${tomcat.home}/work/Catalina/localhost/${app.name}"/>
+        <copy.app.war.to.tomcat tomcat.home="${tomcat.home}" app.name="${app.name}" download.dir="${download.dir}" />
     </target>
 
     <target name="copy.local.war">
@@ -57,62 +43,16 @@
     </target>
 
     <target name="start.tomcat" depends="stop.tomcat">
-        <echo message="Starting tomcat..."/>
-        <echo message="Waiting for tomcat to start on ${tomcat.url}"/>
-        <exec executable="${script.interpreter}" dir="${tomcat.home}" spawn="true">
-            <arg line="${script.switch} ${tomcat.home}/bin/startup.${script.suffix}"/>
-        </exec>
-        <waitfor checkevery="100" checkeveryunit="millisecond" maxwait="2" maxwaitunit="minute"
-                 timeoutproperty="tomcat.timeout">
-            <http url="${tomcat.url}"/>
-        </waitfor>
-        <fail if="tomcat.timeout" message="Error starting up tomcat..."/>
-        <echo message="tomcat started"/>
+        <start.tomcat tomcat.home="${tomcat.home}" tomcat.port="${tomcat.port}"/>
     </target>
+
     <target name="stop.tomcat" description="stop tomcat">
-        <echo message="Stopping tomcat..."/>
-        <echo message="Waiting for tomcat to stop on ${tomcat.url}"/>
-        <exec executable="${script.interpreter}" dir="${tomcat.home}" spawn="true">
-            <arg line="${script.switch} ${tomcat.home}/bin/shutdown.${script.suffix}"/>
-        </exec>
-        <waitfor checkevery="100" checkeveryunit="millisecond" maxwait="2" maxwaitunit="minute"
-                 timeoutproperty="tomcat.timeout">
-            <not>
-                <http url="${tomcat.url}"/>
-            </not>
-        </waitfor>
-        <fail if="tomcat.timeout" message="Error shutting down tomcat..."/>
-        <echo message="tomcat stopped"/>
+        <stop.tomcat tomcat.home="${tomcat.home}" tomcat.port="${tomcat.port}"/>
     </target>
+
     <target name="restart.tomcat" description="restart tomcat">
-        <echo message="restarting tomcat..."/>
-        <exec executable="${script.interpreter}" dir="${tomcat.home}" spawn="true">
-            <arg line="${script.switch} ${tomcat.home}/bin/shutdown.${script.suffix}"/>
-        </exec>
-        <waitfor checkevery="100" checkeveryunit="millisecond" maxwait="2" maxwaitunit="minute"
-                 timeoutproperty="tomcat.timeout">
-            <not>
-                <http url="${tomcat.url}"/>
-            </not>
-        </waitfor>
-        <fail if="tomcat.timeout" message="Error shutting down tomcat..."/>
-        <exec executable="${script.interpreter}" dir="${tomcat.home}" spawn="true">
-            <arg line="${script.switch} ${tomcat.home}/bin/startup.${script.suffix}"/>
-        </exec>
-        <waitfor checkevery="100" checkeveryunit="millisecond" maxwait="2" maxwaitunit="minute"
-                 timeoutproperty="tomcat.timeout">
-            <http url="${tomcat.url}"/>
-        </waitfor>
-        <fail if="tomcat.timeout" message="Error starting up tomcat..."/>
-        <echo message="tomcat restarted"/>
+        <restart.tomcat tomcat.home="${tomcat.home}" tomcat.port="${tomcat.port}"/>
     </target>
-    <target name="clean.tomcat.logs" depends="stop.tomcat" description="Nuke all tomcat logs">
-        <delete failonerror="false">
-            <fileset dir="${tomcat.home}/logs" includes="*"/>
-        </delete>
-        <echo message="removed tomcat logs"/>
-    </target>
-    <!-- *************************RECREATE COUCHDB************************* -->
 
      <path id="lib.path">
         <fileset dir="${tomcat.home}/webapps/${app.name}/WEB-INF/lib" includes="**/*.jar"/>
@@ -155,14 +95,7 @@
     </target>
 
     <target name="drop.couch.db">
-        <echo message="dropping database:${dbname}"/>	
-        <exec executable="curl">
-            <arg value="-s"/>
-            <arg value="-S"/>
-            <arg value="-X"/>
-            <arg value="DELETE"/>
-            <arg value="http://${couchdb.server}:${couchdb.port}/${dbname}"/>
-        </exec>
+        <drop.couch.db couch.db.server="${couchdb.server}" couch.db.port="${couchdb.port}" db.name="${dbname}"/>
     </target>
 
     <target name="drop.all.dbs">
@@ -191,6 +124,7 @@
         </sql>
         <echo message="recreated schema for ${mysql.db.name}"/>
     </target>
+
     <!-- *************************SET PROPERTIES************************* -->
     <target name="set.properties">
         <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
@@ -224,19 +158,13 @@
     </target>
 
     <target name="set.hudson.version">
-    	<echo file="${tomcat.home}/webapps/${app.name}/META-INF/version.txt">
-    	hudson.release.version=${hudson.release.version}
-    	hudson.build.number=${hudson.build.number}
-    	deploy.time=${cctimestamp}
-    	</echo>
-    </target>	
+        <set.hudson.version tomcat.home="${tomcat.home}" app.name="${app.name}" hudson.release.version="${hudson.release.version}" hudson.build.number="${hudson.build.number}" />
+    </target>
+
     <target name="set.nexus.version">
-    	<echo file="${tomcat.home}/webapps/${app.name}/META-INF/version.txt">
-    	nexus.server=${nexus.server}
-    	nexus.release.version=${nexus.release.version}
-    	deploy.time=${cctimestamp}
-    	</echo>
-    </target>	
+        <set.nexus.version tomcat.home="${tomcat.home}" app.name="${app.name}" nexus.server="${nexus.server}" nexus.release.version="${nexus.release.version}" />
+    </target>
+
     <!-- *************************DEPLOY TARGETS************************* -->
     <target name="deploy.tama.from.hudson.and.reset.db" depends="stop.tomcat, 
              							 drop.all.dbs, 
