@@ -28,22 +28,12 @@
         <echo message="downloaded tama-${hudson.release.version}.war from hudson"/>
     </target>
 
-    <target name="download.tama.from.nexus">
-        <copy todir="${download.dir}" flatten="true" overwrite="true">
-            <resources>
-                <url url="http://${nexus.server}:${nexus.port}/content/repositories/releases/org/motechproject/tama/${nexus.release.version}/tama-${nexus.release.version}.war"/>
-            </resources>
-        </copy>
-        <move file="${download.dir}/tama-${nexus.release.version}.war" tofile="${download.dir}/${app.name}.war"/>
-        <echo message="downloaded tama-${nexus.release.version}.war from nexus"/>
-    </target>
-
     <target name="copy.tama.to.tomcat">
         <copy.app.war.to.tomcat tomcat.home="${tomcat.home}" app.name="${app.name}" download.dir="${download.dir}" />
     </target>
 
     <target name="copy.local.war">
-	<echo message="Deploying to tomcat at ${tomcat.url} with tomcat home ${tomcat.home}"/>
+    	<echo message="Deploying to tomcat at ${tomcat.url} with tomcat home ${tomcat.home}"/>
         <delete dir="${tomcat.home}/webapps/${app.name}"/>
         <copy file="${download.dir}/${local.war.file}" tofile="${tomcat.home}/webapps/${app.name}.war" overwrite="true"/>
         <delete dir="${tomcat.home}/work/Catalina/localhost/${app.name}"/>
@@ -66,20 +56,7 @@
     </path>
 
     <target name="load.seed.data">
-        <echo message="please wait ..."/>
-        <java fork="false" classname="${couchdb.seed.main.class}">
-            <classpath>
-                <path location="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"/>
-                <path refid="lib.path"/>
-            </classpath>
-        </java>
-        <echo message="seed data loaded into ${couchdb.tama.db.name} database"/>
-        <if>
-            <equals arg1="${audio.seed.load}" arg2="true"/>
-            <then>
-                <antcall target="load.audio.seed"/>
-            </then>
-        </if>        
+        <load.seed.data tomcat.home="${tomcat.home}" app.name="${app.name}" couchdb.seed.main.class="${couchdb.seed.main.class}" db.name="${couchdb.tama.db.name}" />
     </target>
 
     <target name="load.audio.seed">
@@ -156,88 +133,24 @@
     </target>
 
     <target name="unwire.motech.delivery.tools">
- 	 <delete failonerror="false">
+ 	    <delete failonerror="false">
             <fileset dir="${tomcat.home}/webapps/${app.name}/WEB-INF/lib" includes="motech-job-handler-invoker*"/>
             <fileset dir="${tomcat.home}/webapps/${app.name}/WEB-INF/lib" includes="motech-datetime-simulator*"/>
         </delete>
-        <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
-              file="${basedir}/properties/${env}/placeholderPluginContext.xml"/>
-    </target>
-
-    <target name="set.hudson.version">
-        <set.hudson.version tomcat.home="${tomcat.home}" app.name="${app.name}" hudson.release.version="${hudson.release.version}" hudson.build.number="${hudson.build.number}" />
-    </target>
-
-    <target name="set.nexus.version">
-        <set.nexus.version tomcat.home="${tomcat.home}" app.name="${app.name}" nexus.server="${nexus.server}" nexus.release.version="${nexus.release.version}" />
+        <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes" file="${basedir}/properties/${env}/placeholderPluginContext.xml"/>
     </target>
 
     <!-- *************************DEPLOY TARGETS************************* -->
-    <target name="deploy.tama.from.hudson.and.reset.db" depends="stop.tomcat, 
-             							 drop.all.dbs, 
-             							 load.quartz.schema, 
-								 download.tama.from.hudson, 
-								 copy.tama.to.tomcat, 
-								 start.tomcat, 
-								 load.seed.data, 								
-								 set.properties, 
-								 set.hudson.version,								 
-								 restart.tomcat"
-            description="Deploy TAMA by 
-                         1) fetching artifact from hudson, 
-                         2) recreate tama-web couchdb database with seed data
-                         3) clearing quartz mysql jobdatastore
-			 4) set properties for war"/>
+    <target name="deploy.tama.from.hudson.and.reset.db" depends="stop.tomcat, drop.all.dbs, load.quartz.schema, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, load.seed.data, load.audio.seed, set.properties, restart.tomcat"
+            description="Deploy TAMA by 1) fetching artifact from hudson, 2) recreate tama-web couchdb database with seed data 3) clearing quartz mysql jobdatastore 4) set properties for war"/>
 
-    <target name="deploy.tama.from.nexus.and.reset.db" depends="stop.tomcat, 
-             							drop.all.dbs, 
-             							load.quartz.schema, 
-								download.tama.from.nexus, 
-								copy.tama.to.tomcat, 
-								start.tomcat, 
-								load.seed.data,								 
-								set.properties, 
-								set.nexus.version,
-								restart.tomcat"
-            description="Deploy TAMA by 
-                         1) fetching artifact from nexus, 
-                         2) recreate tama-web couchdb database with seed data
-                         3) clearing quartz mysql jobdatastore
-                         4) set properties for war"/>
-
-    <target name="deploy.tama.from.hudson" depends="stop.tomcat, 
- 						    download.tama.from.hudson, 
-						    copy.tama.to.tomcat,
-						    start.tomcat, 
-						    set.properties, 
-						    set.hudson.version,
-						    restart.tomcat"
+    <target name="deploy.tama.from.hudson" depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, restart.tomcat"
             description="Deploy TAMA from hudson without recreating database and seed data"/>
 
-    <target name="deploy.tama.from.nexus" depends="stop.tomcat, 
-						   download.tama.from.nexus, 
-						   copy.tama.to.tomcat, 
- 						   start.tomcat, 
-						   set.properties, 
-						   set.nexus.version,
-						   restart.tomcat"
-            description="Deploy TAMA from nexus without recreating database and seed data"/>
-
-    <target name="deploy.tama.from.local" depends="stop.tomcat, 
-					  	   copy.local.war,
- 						   start.tomcat, 
-						   set.properties, 
-						   restart.tomcat"
-            description="Deploy TAMA from locally downloaded war(set 'local.war.file' in deploy.properties) in artifacts folder without recreating database and seed data"/>
-
-    <target name="deploy.tama.from.local.and.reset.db" depends="stop.tomcat,
-                                                   drop.all.dbs,
-                                                   load.quartz.schema, 
-					  	   copy.local.war,
- 						   start.tomcat,
-						   load.seed.data,								 
-						   set.properties, 
-						   restart.tomcat"
+    <target name="deploy.tama.from.local.and.reset.db" depends="stop.tomcat, drop.all.dbs, load.quartz.schema, copy.local.war, start.tomcat, load.seed.data, load.audio.seed, set.properties, restart.tomcat"
             description="Deploy TAMA from locally downloaded war(set 'local.war.file' in deploy.properties) in artifacts folder. Also recreates the TAMA database."/>
+
+    <target name="deploy.tama.from.local" depends="stop.tomcat, copy.local.war, start.tomcat, set.properties, restart.tomcat"
+            description="Deploy TAMA from locally downloaded war(set 'local.war.file' in deploy.properties) in artifacts folder without recreating database and seed data"/>
 
 </project>
