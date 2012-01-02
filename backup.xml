@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="tama" basedir=".">
+
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="lib/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+
+    <typedef resource="org/motechproject/build/operationMacroDefs.xml">
+        <classpath>
+            <pathelement location="lib/motech-delivery-ops-0.3-SNAPSHOT.jar"/>
+        </classpath>
+    </typedef>
+
+    <property file="${basedir}/properties/${env}/deploy.properties"/>
+
+    <target name="backup">
+        <mkdir dir="${mysql.data.backup.location}"/>
+        <mkdir dir="${couchdb.data.backup.location}"/>
+        <backup.db.to.location activemq.home="${activemq.home}" activemq.port="${activemq.port}"
+                couch.db.port="${couch.db.port}" tomcat.home="${tomcat.home}" tomcat.port="${tomcat.port}"
+                mysql.data.backup.location="${mysql.data.backup.location}" mysql.data.location="${mysql.data.location}"
+                couchdb.data.backup.location="${couchdb.data.backup.location}" couchdb.data.location="${couchdb.data.location}"/>
+    </target>
+</project>
