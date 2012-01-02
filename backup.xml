@@ -21,6 +21,6 @@
         <backup.db.to.location activemq.home="${activemq.home}" activemq.port="${activemq.port}"
                 couch.db.port="${couch.db.port}" tomcat.home="${tomcat.home}" tomcat.port="${tomcat.port}"
                 mysql.data.backup.location="${mysql.data.backup.location}" mysql.data.location="${mysql.data.location}"
-                couchdb.data.backup.location="${couchdb.data.backup.location}" couchdb.data.location="${couchdb.data.location}"/>
+                couch.db.data.backup.location="${couch.db.data.backup.location}" couch.db.data.location="${couch.db.data.location}"/>
     </target>
 </project>
