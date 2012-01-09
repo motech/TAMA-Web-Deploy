@@ -84,6 +84,7 @@
         <java fork="false" classname="${cache.audio.files.main.class}">
             <classpath>
                 <path location="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"/>
+                <path refid="lib.path"/>
             </classpath>
             <arg value="${kookoo.api.key}"/>
             <arg value="${content.location.url}"/>
