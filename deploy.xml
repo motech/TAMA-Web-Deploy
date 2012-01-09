@@ -14,6 +14,7 @@
     </typedef>
 
     <property file="${basedir}/properties/${env}/deploy.properties"/>
+    <property file="${basedir}/properties/${env}/ivr.properties"/>
 
     <!-- *********************** DOWNLOAD ARTIFACTS************************* -->
     <target name="download.tama.from.hudson">
@@ -76,6 +77,18 @@
             </classpath>
         </java>
         <echo message="audio seed loaded into database"/>
+    </target>
+
+    <target name="cache.audio.files.in.kookoo">
+        <echo message="Caching audio files.."/>
+        <java fork="false" classname="${cache.audio.files.main.class}">
+            <classpath>
+                <path location="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"/>
+            </classpath>
+            <arg value="${kookoo.api.key}"/>
+            <arg value="${content.location.url}"/>
+        </java>
+        <echo message="Done caching audio files"/>
     </target>
 
     <target name="drop.couch.db">
