@@ -1,0 +1,14 @@
+{
+    "request": {
+        "urlPath": "http://www.kookoo.in/outbound/outbound_sms.php",
+        "queryParameters": {
+            "phone_no": "$recipients" ,
+            "message": "$message" ,
+            "api_key": "<your-kookoo-api-key>"
+        }
+    },
+    "response": {
+        "success": "<status>success</status>"
+    }
+}
+
