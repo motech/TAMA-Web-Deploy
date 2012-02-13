@@ -144,6 +144,8 @@
         <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
               file="${basedir}/properties/${env}/healthtips.properties"/>
         <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
+              file="${basedir}/properties/${env}/timeSlot.properties"/>
+        <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
               file="${basedir}/properties/${env}/log4j.xml"/>
 	<copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
 	      file="${basedir}/properties/${env}/sms-http-template.json"/>
