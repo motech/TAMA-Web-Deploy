@@ -151,6 +151,8 @@
               file="${basedir}/properties/${env}/log4j.xml"/>
 	<copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
 	      file="${basedir}/properties/${env}/sms-http-template.json"/>
+	<copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
+              file="${basedir}/properties/${env}/tama.properties"/>
 	<antcall target="unwire.motech.delivery.tools"/>
     </target>
 
