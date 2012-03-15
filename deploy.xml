@@ -149,11 +149,13 @@
               file="${basedir}/properties/${env}/appointments.properties"/>
         <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
               file="${basedir}/properties/${env}/log4j.xml"/>
-	<copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
-	      file="${basedir}/properties/${env}/sms-http-template.json"/>
-	<copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
-              file="${basedir}/properties/${env}/tama.properties"/>
-	<antcall target="unwire.motech.delivery.tools"/>
+		<copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
+			  file="${basedir}/properties/${env}/sms-http-template.json"/>
+		<copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
+				  file="${basedir}/properties/${env}/tama.properties"/>
+		<copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
+				  file="${basedir}/properties/${env}/clinicianSMS.properties"/>
+		<antcall target="unwire.motech.delivery.tools"/>
     </target>
 
     <target name="unwire.motech.delivery.tools">
