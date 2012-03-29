@@ -42,15 +42,24 @@
     </target>
 
     <target name="start.tomcat" depends="stop.tomcat">
-        <start.tomcat tomcat.home="${tomcat.home}" tomcat.port="${tomcat.port}"/>
+        <exec executable="/sbin/service">
+            <arg value="tomcat"/>
+            <arg value="start"/>
+        </exec>
     </target>
 
     <target name="stop.tomcat" description="stop tomcat">
-        <stop.tomcat tomcat.home="${tomcat.home}" tomcat.port="${tomcat.port}"/>
+        <exec executable="/sbin/service">
+            <arg value="tomcat"/>
+            <arg value="stop"/>
+        </exec>
     </target>
 
     <target name="restart.tomcat" description="restart tomcat">
-        <restart.tomcat tomcat.home="${tomcat.home}" tomcat.port="${tomcat.port}"/>
+        <exec executable="/sbin/service">
+            <arg value="tomcat"/>
+            <arg value="restart"/>
+        </exec>
     </target>
 
     <path id="lib.path">
