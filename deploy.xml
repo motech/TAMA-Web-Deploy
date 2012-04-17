@@ -41,16 +41,37 @@
         <delete dir="${tomcat.home}/work/Catalina/localhost/${app.name}"/>
     </target>
 
-    <target name="start.tomcat" depends="stop.tomcat">
-        <start.tomcat tomcat.home="${tomcat.home}" tomcat.port="${tomcat.port}"/>
+    <target name="start.tomcat" depends="stop.tomcat" description="start tomcat">
+        <echo message="Starting tomcat..."/>
+        <echo message="Waiting for tomcat to start with tomcat home at ${tomcat.home}"/>
+        <exec executable="${script.interpreter}" dir="${tomcat.home}">
+            <arg line="service tomcat start"/>
+        </exec>
+        <waitfor checkevery="100" checkeveryunit="millisecond" maxwait="3" maxwaitunit="minute" timeoutproperty="tomcat.timeout">
+            <http url="http://localhost:${tomcat.port}"/>
+        </waitfor>
+        <fail if="tomcat.timeout" message="Error starting up tomcat..."/>
+        <echo message="Tomcat started"/>
     </target>
 
     <target name="stop.tomcat" description="stop tomcat">
-        <stop.tomcat tomcat.home="${tomcat.home}" tomcat.port="${tomcat.port}"/>
+        <echo message="Stopping tomcat..."/>
+        <echo message="Waiting for tomcat to stop with tomcat home at ${tomcat.home}"/>
+        <exec executable="${script.interpreter}" dir="${tomcat.home}" spawn="true">
+            <arg line="service tomcat stop"/>
+        </exec>
+        <waitfor checkevery="100" checkeveryunit="millisecond" maxwait="3" maxwaitunit="minute" timeoutproperty="tomcat.timeout">
+            <not>
+                <http url="http://localhost:${tomcat.port}"/>
+            </not>
+        </waitfor>
+        <fail if="tomcat.timeout" message="Error shutting down tomcat..."/>
+        <echo message="Tomcat stopped"/>
     </target>
 
     <target name="restart.tomcat" description="restart tomcat">
-        <restart.tomcat tomcat.home="${tomcat.home}" tomcat.port="${tomcat.port}"/>
+        <antcall target="stop.tomcat" />
+        <antcall target="start.tomcat" />
     </target>
 
     <path id="lib.path">
