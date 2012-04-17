@@ -44,7 +44,7 @@
     <target name="start.tomcat" depends="stop.tomcat" description="start tomcat">
         <echo message="Starting tomcat..."/>
         <echo message="Waiting for tomcat to start with tomcat home at ${tomcat.home}"/>
-        <exec executable="service" dir="${tomcat.home}">
+        <exec executable="/sbin/service" dir="${tomcat.home}">
             <arg line="tomcat start"/>
         </exec>
         <waitfor checkevery="100" checkeveryunit="millisecond" maxwait="3" maxwaitunit="minute" timeoutproperty="tomcat.timeout">
@@ -57,7 +57,7 @@
     <target name="stop.tomcat" description="stop tomcat">
         <echo message="Stopping tomcat..."/>
         <echo message="Waiting for tomcat to stop with tomcat home at ${tomcat.home}"/>
-        <exec executable="service" dir="${tomcat.home}" spawn="true">
+        <exec executable="/sbin/service" dir="${tomcat.home}" spawn="true">
             <arg line="tomcat stop"/>
         </exec>
         <waitfor checkevery="100" checkeveryunit="millisecond" maxwait="3" maxwaitunit="minute" timeoutproperty="tomcat.timeout">
