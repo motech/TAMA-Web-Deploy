@@ -199,10 +199,10 @@
         </if>
         <if>
             <equals arg1="${env}" arg2="prod" />
-            <then>
+	    <then>
                 <echo message="Removing emulator." />
-                <delete failonerror="false">
-                    <fileset dir="${tomcat.home}/webapps/${app.name}" includes="emulator"/>
+                <delete failonerror="false" includeemptydirs="true">
+                    <fileset dir="${tomcat.home}/webapps/${app.name}" includes="emulator/**" defaultexcludes="false"/>
                 </delete>
             </then>
             <else>
