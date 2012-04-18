@@ -183,7 +183,7 @@
         <if>
             <equals arg1="${with.tools}" arg2="true" />
             <then>
-                <echo message="Installing TAMA tools." />
+                <echo message="TAMA tools installed." />
             </then>
             <else>
                 <echo message="Removing TAMA tools." />
@@ -195,6 +195,18 @@
                 </delete>
                 <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
                       file="${basedir}/properties/${env}/placeholderPluginContext.xml"/>
+            </else>
+        </if>
+        <if>
+            <equals arg1="${env}" arg2="prod" />
+            <then>
+                <echo message="Removing emulator." />
+                <delete failonerror="false">
+                    <fileset dir="${tomcat.home}/webapps/${app.name}" includes="emulator"/>
+                </delete>
+            </then>
+            <else>
+                <echo message="Emulator installed." />
             </else>
         </if>
     </target>
