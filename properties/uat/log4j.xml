@@ -10,6 +10,19 @@
             <param value="%d %p [%c] - %m%n" name="ConversionPattern"/>
         </layout>
     </appender>
+
+    <appender name="email" class="org.motechproject.tama.tools.logging.EmailAppender">
+        <param name="SMTPHost" value="gmail-smtp-in.l.google.com"/>
+        <param name="From" value="tamasupport@thoughtworks.com"/>
+        <param name="To" value="tamasupport@thoughtworks.com"/>
+        <param name="Subject" value="TAMA Error | "/>
+        <param name="BufferSize" value="50"/>
+        <param name="threshold" value="error"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ddMMyyyy HH:mm:ss} %-5p [%c{1}] [ThreadId:%t] - %m%n"/>
+        </layout>
+    </appender>
+
     <logger name="org.springframework">
         <level value="error"/>
     </logger>
@@ -18,7 +31,7 @@
     </logger>
     <logger name="org.apache">
         <level value="error"/>
-    </logger>	
+    </logger>
     <logger name="org.quartz">
         <level value="error"/>
     </logger>
