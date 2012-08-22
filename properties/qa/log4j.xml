@@ -16,20 +16,28 @@
     <logger name="org.springframework">
         <level value="error"/>
     </logger>
+
     <logger name="org.ektorp">
         <level value="error"/>
     </logger>
+
     <logger name="org.apache">
         <level value="error"/>
-    </logger>	
+    </logger>
+
     <logger name="org.quartz">
         <level value="error"/>
     </logger>
+
     <logger name="org.motechproject">
         <level value="info"/>
+        <appender-ref ref="logfile"/>
+        <appender-ref ref="email"/>
     </logger>
+
     <root>
         <priority value="info"/>
         <appender-ref ref="logfile"/>
     </root>
+
 </log4j:configuration>
