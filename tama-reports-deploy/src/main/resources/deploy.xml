@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:flyway="antlib:com.googlecode.flyway.ant">
+
+    <typedef file="org/motechproject/build/deployMacroDefs.xml"/>
+    <typedef resource="org/motechproject/build/operationMacroDefs.xml"/>
+
+    <property file="${basedir}/properties/${env}/deploy.properties"/>
+
+    <path id="migrations.classpath">
+        <fileset dir="${download.dir}" includes="**/*.jar" />
+    </path>
+
+    <target name="create.db">
+        <exec executable="createdb">
+            <arg line="-U postgres tama"/>
+        </exec>
+    </target>
+
+    <target name="deploy.from.hudson.with.reset.db">
+        <antcall target="-stop.tomcat" />
+        <antcall target="drop.db" />
+        <antcall target="create.db" />
+        <antcall target="-clean.and.migrate.database"/>
+        <antcall target="-deploy.from.hudson" />
+        <antcall target="-start.tomcat" />
+    </target>
+
+    <target name="reset.db">
+        <antcall target="-stop.tomcat" />
+        <antcall target="drop.db" />
+        <antcall target="create.db" />
+        <antcall target="-clean.and.migrate.database"/>
+        <antcall target="-start.tomcat" />
+    </target>
+
+    <target name="deploy.from.hudson">
+        <antcall target="-stop.tomcat" />
+        <antcall target="-migrate.database"/>
+        <antcall target="-deploy.from.hudson" />
+        <antcall target="-start.tomcat" />
+    </target>
+
+    <target name="deploy.from.hudson.without.migration">
+        <antcall target="-stop.tomcat" />
+        <antcall target="-deploy.from.hudson" />
+        <antcall target="-start.tomcat" />
+    </target>
+
+    <target name="deploy.from.hudson.with.init.db">
+        <antcall target="create.log.folder" />
+        <antcall target="-stop.tomcat" />
+        <antcall target="-init.and.migrate.database"/>
+        <antcall target="-deploy.from.hudson" />
+        <antcall target="-start.tomcat" />
+    </target>
+
+    <target name="-deploy.from.hudson">
+
+        <copy todir="${download.dir}" flatten="true" overwrite="true">
+            <resources>
+                <url url="http://${hudson.server}:${hudson.port}/job/${hudson.job.name}/${build}/${hudson.job.groupid}$$${app.name}-web/artifact/${hudson.job.groupid}/${app.name}-web/${hudson.release.version}/${app.name}-${hudson.release.version}.war"/>
+            </resources>
+        </copy>
+
+        <move file="${download.dir}/${app.name}-${hudson.release.version}.war" tofile="${download.dir}/${app.name}.war"/>
+
+        <echo message="downloaded tama-reports-${hudson.release.version}.war from hudson"/>
+
+        <copy.app.war.to.tomcat
+                tomcat.home="${tomcat.home}"
+                app.name="${app.name}"
+                download.dir="${download.dir}"/>
+
+        <explode.war
+                tomcat.home="${tomcat.home}"
+                app.name="${app.name}"/>
+
+        <copy.over.resources
+                tomcat.home="${tomcat.home}"
+                app.name="${app.name}"
+                basedir="${basedir}"
+                env="${env}"/>
+
+        <set.hudson.version
+                tomcat.home="${tomcat.home}"
+                app.name="${app.name}"
+                hudson.release.version="${hudson.release.version}"
+                hudson.build.number="${build}"/>
+    </target>
+
+    <target name="-clean.and.migrate.database">
+        <antcall target="-clean.database" />
+        <antcall target="-init.database" />
+        <antcall target="-migrate.database" />
+    </target>
+
+    <target name="clean.and.migrate.database">
+        <antcall target="-clean.and.migrate.database" />
+    </target>
+
+    <target name="drop.db">
+        <exec executable="dropdb">
+            <arg line="-U postgres tama"/>
+        </exec>
+    </target>
+
+    <target name="-init.and.migrate.database">
+        <antcall target="-init.database" />
+        <antcall target="-migrate.database" />
+    </target>
+
+    <target name="-clean.database" depends="-download.migrations.jar">
+        <cleanup.database.using.flyway schemas="${postgres.schema}"
+                                       dbDriver="${postgres.driver}"
+                                       dbJdbcUrl="${postgres.url}"
+                                       user="${postgres.username}"
+                                       password="${postgres.password}"/>
+
+        <exec executable="psql">
+            <arg line="${postgres.db.name} -U ${postgres.username} -f ${basedir}/db/setup/base_setup.sql"/>
+        </exec>
+    </target>
+
+    <target name="-init.database">
+        <flyway:init driver="org.postgresql.Driver"
+                     url="${postgres.url}"
+                     user="${postgres.username}"
+                     password="${postgres.password}"
+                     schemas="${postgres.schema}"
+                     classpath="${runtime-classpath}"
+                     initialVersion="0"
+                     initialDescription="Base setup" />
+    </target>
+
+    <target name="-download.migrations.jar">
+        <download.app.from.remote
+                app.name="${migrations.app.name}"
+                remote.location="http://${hudson.server}/job/${hudson.job.name}/${build}/${hudson.job.groupid}$$${migrations.app.name}/artifact/${hudson.job.groupid}/${migrations.app.name}/${hudson.release.version}/${migrations.app.name}-${hudson.release.version}.jar"
+                download.dir="${download.dir}"
+                app.ext="jar"
+                />
+    </target>
+
+    <target name="-migrate.database" depends="-download.migrations.jar">
+        <migrate.using.flyway classpathref="migrations.classpath"
+                              schemas="${postgres.schema}"
+                              dbDriver="${postgres.driver}"
+                              dbJdbcUrl="${postgres.url}"
+                              user="${postgres.username}"
+                              password="${postgres.password}"/>
+    </target>
+
+    <target name="create.log.folder">
+        <exec executable="sh">
+            <arg value="${basedir}/scripts/create_log_dir.sh"/>
+            <arg value="${app.name}"/>
+            <arg value="${username}"/>
+            <arg value="${username}"/>
+            <arg value="${user.pwd}"/>
+        </exec>
+    </target>
+
+    <target name="-stop.tomcat">
+        <stop.tomcat
+                tomcat.home="${tomcat.home}"
+                tomcat.port="${tomcat.port}"/>
+    </target>
+
+    <target name="-start.tomcat">
+        <start.tomcat
+                tomcat.home="${tomcat.home}"
+                tomcat.port="${tomcat.port}"/>
+    </target>
+</project>
