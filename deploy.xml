@@ -84,25 +84,6 @@
                         couchdb.seed.main.class="${couchdb.seed.main.class}" db.name="${couchdb.tama.db.name}"/>
     </target>
 
-    <target name="load.audio.seed">
-        <exec executable="curl">
-            <arg value="-s"/>
-            <arg value="-S"/>
-            <arg value="-X"/>
-            <arg value="DELETE"/>
-            <arg value="http://${couchdb.server}:${couchdb.port}/${couchdb.platform.cmslite.db.name}"/>
-        </exec>
-        <echo message="${couchdb.platform.cmslite.db.name} database dropped from couchdb server"/>
-        <echo message="Loading Audio Seed.."/>
-        <java fork="false" classname="${couchdb.seed.audio.main.class}">
-            <classpath>
-                <path location="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"/>
-                <path refid="lib.path"/>
-            </classpath>
-        </java>
-        <echo message="audio seed loaded into database"/>
-    </target>
-
     <target name="cache.audio.files.in.kookoo">
         <echo message="Caching audio files.."/>
         <java fork="false" classname="${cache.audio.files.main.class}">
@@ -216,7 +197,7 @@
 
     <!-- *************************DEPLOY TARGETS************************* -->
     <target name="deploy.tama.from.hudson.and.reset.db"
-            depends="stop.tomcat, drop.all.dbs, load.quartz.schema, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, load.seed.data, load.audio.seed, restart.tomcat"
+            depends="stop.tomcat, drop.all.dbs, load.quartz.schema, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, load.seed.data, restart.tomcat"
             description="Deploy TAMA by 1) fetching artifact from hudson, 2) recreate tama-web couchdb database with seed data 3) clearing quartz mysql jobdatastore 4) set properties for war"/>
 
     <target name="deploy.tama.from.hudson"
@@ -224,7 +205,7 @@
             description="Deploy TAMA from hudson without recreating database and seed data"/>
 
     <target name="deploy.tama.from.local.and.reset.db"
-            depends="stop.tomcat, drop.all.dbs, load.quartz.schema, copy.local.war, start.tomcat, set.properties, load.seed.data, load.audio.seed, restart.tomcat"
+            depends="stop.tomcat, drop.all.dbs, load.quartz.schema, copy.local.war, start.tomcat, set.properties, load.seed.data, restart.tomcat"
             description="Deploy TAMA from locally downloaded war(set 'local.war.file' in deploy.properties) in artifacts folder. Also recreates the TAMA database."/>
 
     <target name="deploy.tama.from.local"
