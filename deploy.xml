@@ -22,7 +22,7 @@
         <exec executable="bash" failonerror="true">
             <arg file="${basedir}/scripts/download_artifact.sh"/>
             <arg value="http://${hudson.server}:${hudson.port}/j_acegi_security_check"/>
-            <arg value="http://${hudson.server}:${hudson.port}/job/${hudson.job.name}/${hudson.build.number}/org.motechproject.tama$tama/artifact/org.motechproject.tama/tama/${hudson.release.version}/tama-${hudson.release.version}.war"/>
+            <arg value="http://${hudson.server}:${hudson.port}/job/${hudson.job.name}/${hudson.build.number}/${hudson.artifact.path}/artifact/org.motechproject.tama/tama/${hudson.release.version}/tama-${hudson.release.version}.war"/>
             <arg value="${download.dir}/${app.name}.war"/>
             <arg value="${hudson.username}"/>
             <arg value="${hudson.password}"/>
@@ -177,6 +177,8 @@
 				  file="${basedir}/properties/${env}/tama.properties"/>
 		<copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
 				  file="${basedir}/properties/${env}/clinicianSMS.properties"/>
+        <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
+              file="${basedir}/properties/${env}/tamaReports.properties"/>
 		<antcall target="unwire.motech.delivery.tools"/>
     </target>
 
