@@ -200,6 +200,9 @@
             depends="stop.tomcat, drop.all.dbs, load.quartz.schema, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, load.seed.data, restart.tomcat"
             description="Deploy TAMA by 1) fetching artifact from hudson, 2) recreate tama-web couchdb database with seed data 3) clearing quartz mysql jobdatastore 4) set properties for war"/>
 
+    <target name="deploy.tama.from.hudson.and.migrate.without.reset.db"
+            depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, load.seed.data, restart.tomcat"/>
+
     <target name="deploy.tama.from.hudson"
             depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, restart.tomcat"
             description="Deploy TAMA from hudson without recreating database and seed data"/>
