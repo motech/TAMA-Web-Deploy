@@ -10,8 +10,8 @@ rm -rf $WORKING_DIR
 mkdir $WORKING_DIR
 cd $WORKING_DIR
 
-wget http://192.168.42.26/view/tama/job/$HUDSON_JOB_NAME/lastSuccessfulBuild/TAMA-Web-Deploy\$TAMA-Web-Deploy/artifact/TAMA-Web-Deploy/TAMA-Web-Deploy/$DEPLOY_VERSION/TAMA-Web-Deploy-$DEPLOY_VERSION.jar
-unzip TAMA-Web-Deploy-$DEPLOY_VERSION.jar
-rm -rf TAMA-Web-Deploy-$DEPLOY_VERSION.jar
+wget http://192.168.42.26/view/tama/job/$HUDSON_JOB_NAME/lastSuccessfulBuild/TAMA-Web-Deploy\$TAMA-Web-Deploy/artifact/TAMA-Web-Deploy/TAMA-Web-Deploy/$DEPLOY_VERSION/TAMA-Web-Deploy-$DEPLOY_VERSION-bin.zip
+unzip TAMA-Web-Deploy-$DEPLOY_VERSION-bin.zip
+rm -rf TAMA-Web-Deploy-$DEPLOY_VERSION-bin.zip
 sudo ant $3 -f deploy.xml -Denv=$BUILD_ENV -Dbuild=$BUILD
 

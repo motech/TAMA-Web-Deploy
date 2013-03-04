@@ -18,7 +18,7 @@
             <version>0.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
-     <repositories>
+    <repositories>
         <repository>
             <id>motech-repo</id>
             <name>Motech Maven Repository</name>
@@ -50,6 +50,26 @@
     </distributionManagement>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>
+                            install
+                        </phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+                <version>2.4</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

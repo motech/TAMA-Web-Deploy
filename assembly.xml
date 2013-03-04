@@ -1,0 +1,11 @@
+<assembly>
+    <id>bin</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>${basedir}</directory>
+        </fileSet>
+    </fileSets>
+</assembly>
