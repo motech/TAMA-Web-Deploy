@@ -13,4 +13,4 @@ cd $WORKING_DIR
 wget 'http://192.168.42.26/view/tama/job/'$HUDSON_JOB_NAME'/lastSuccessfulBuild/TAMA-Web-Deploy$TAMA-Web-Deploy/artifact/TAMA-Web-Deploy/TAMA-Web-Deploy/'$DEPLOY_VERSION'/TAMA-Web-Deploy-'$DEPLOY_VERSION'.jar'
 unzip TAMA-Web-Deploy-$DEPLOY_VERSION.jar
 rm -rf TAMA-Web-Deploy-$DEPLOY_VERSION.jar
-sudo ant $4 -f deploy.xml -Denv=$BUILD_ENV -Dbuild=$BUILD
+sudo ant $3 -f deploy.xml -Denv=$BUILD_ENV -Dbuild=$BUILD
