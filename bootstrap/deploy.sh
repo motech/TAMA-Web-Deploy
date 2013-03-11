@@ -4,7 +4,7 @@ BUILD=$2
 WORKING_DIR=/tmp/deploy
 DEPLOY_VERSION=0.1-SNAPSHOT
 DEPLOY_TARGET=$3
-HUDSON_JOB_NAME=tama-web-deploy
+HUDSON_JOB_NAME=tama-web-deploy-main
 
 rm -rf $WORKING_DIR
 mkdir $WORKING_DIR
