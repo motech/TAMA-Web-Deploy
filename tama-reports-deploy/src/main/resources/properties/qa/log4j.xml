@@ -2,7 +2,7 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
     <appender name="production" class="org.apache.log4j.RollingFileAppender">
-        <param value="/home/tamasuper/apache-tomcat-7.0.22/logs/tama-reports.log" name="File"/>
+        <param value="/home/tamasuper/apache-tomcat-7.0.22-primary/logs/tama-reports.log" name="File"/>
         <param name="Append" value="true"/>
         <param name="MaxFileSize" value="4096KB"/>
         <param name="maxBackupIndex" value="5"/>
@@ -22,10 +22,10 @@
         <appender-ref ref="adminEmail"/>
     </logger>
     <root>
-        <priority value="warn"/>
+        <level value="all"/>
         <appender-ref ref="production"/>
+        <appender-ref ref="adminEmail"/>
     </root>
-
     <appender name="adminEmail" class="org.motechproject.web.logger.EmailAppender">
         <param name="BufferSize" value="512"/>
         <param name="SMTPHost" value="gmail-smtp-in.l.google.com"/>

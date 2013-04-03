@@ -2,7 +2,7 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
     <appender class="org.apache.log4j.RollingFileAppender" name="logfile">
-        <param value="/home/tamasuper/apache-tomcat-7.0.21/logs/tama.log" name="File"/>
+        <param value="/home/tamasuper/apache-tomcat-7.0.22-primary/logs/tama.log" name="File"/>
         <param name="Append" value="true"/>
         <param name="MaxFileSize" value="4096KB"/>
         <param name="maxBackupIndex" value="5"/>
@@ -11,7 +11,21 @@
         </layout>
     </appender>
 
-    <appender name="email" class="org.apache.log4j.varia.NullAppender"/>
+    <appender name="adminEmail" class="org.motechproject.web.logger.EmailAppender">
+        <param name="BufferSize" value="512"/>
+        <param name="SMTPHost" value="gmail-smtp-in.l.google.com"/>
+        <param name="From" value="motech.ivr@thoughtworks.com"/>
+        <param name="To" value="tamasupport@thoughtworks.com"/>
+        <param name="Subject" value="TAMA Error from QA | "/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                   value="[%d{ISO8601}]%n%n%-5p%n%n%c%n%n%m%n%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="error"/>
+            <param name="LevelMax" value="fatal"/>
+        </filter>
+    </appender>
     
     <logger name="org.springframework">
         <level value="error"/>
@@ -36,8 +50,9 @@
     </logger>
 
     <root>
-        <priority value="info"/>
+        <level value="all"/>
         <appender-ref ref="logfile"/>
+        <appender-ref ref="email"/>
     </root>
 
 </log4j:configuration>
