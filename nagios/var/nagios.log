@@ -1,0 +1,36 @@
+[1364927400] LOG ROTATION: DAILY
+[1364927400] LOG VERSION: 2.0
+[1364927400] CURRENT HOST STATE: localhost;UP;HARD;1;PING OK - Packet loss = 0%, RTA = 0.06 ms
+[1364927400] CURRENT HOST STATE: tama;UP;HARD;1;PING OK - Packet loss = 0%, RTA = 0.05 ms
+[1364927400] CURRENT SERVICE STATE: localhost;Current Load;OK;HARD;1;OK - load average: 0.07, 0.03, 0.01
+[1364927400] CURRENT SERVICE STATE: localhost;Current Users;OK;HARD;1;USERS OK - 0 users currently logged in
+[1364927400] CURRENT SERVICE STATE: localhost;HTTP;OK;HARD;1;HTTP OK: HTTP/1.1 302 Found - 486 bytes in 0.001 second response time
+[1364927400] CURRENT SERVICE STATE: localhost;PING;OK;HARD;1;PING OK - Packet loss = 0%, RTA = 0.05 ms
+[1364927400] CURRENT SERVICE STATE: localhost;Root Partition;OK;HARD;1;DISK OK - free space: / 15170 MB (79% inode=94%):
+[1364927400] CURRENT SERVICE STATE: localhost;SSH;CRITICAL;HARD;4;CRITICAL - Socket timeout after 10 seconds
+[1364927400] CURRENT SERVICE STATE: localhost;Swap Usage;OK;HARD;1;SWAP OK - 96% free (7862 MB out of 8191 MB)
+[1364927400] CURRENT SERVICE STATE: localhost;Total Processes;OK;HARD;1;PROCS OK: 117 processes with STATE = RSZDT
+[1364927400] CURRENT SERVICE STATE: tama;Activemq messages;CRITICAL;HARD;3;OK - tama.event.queue holding: 0 msgs CRITICAL - ActiveMQ.DLQ holding: 849 msgs
+[1364927400] CURRENT SERVICE STATE: tama;Apache SSL;OK;HARD;1;HTTP OK: HTTP/1.1 302 Found - 483 bytes in 0.001 second response time
+[1364927400] CURRENT SERVICE STATE: tama;CPU Load;OK;HARD;1;OK - load average: 0.00, 0.01, 0.00
+[1364927400] CURRENT SERVICE STATE: tama;CouchDB;OK;HARD;1;HTTP OK: HTTP/1.1 200 OK - 229 bytes in 0.003 second response time
+[1364927400] CURRENT SERVICE STATE: tama;DB Volume;OK;HARD;1;DISK OK - free space: /var/lib/couchdb 27863 MB (97% inode=99%):
+[1364927400] CURRENT SERVICE STATE: tama;No. of Apache processes;OK;HARD;1;PROCS OK: 19 processes with args '/usr/sbin/httpd'
+[1364927400] CURRENT SERVICE STATE: tama;Root Disk Space;OK;HARD;1;DISK OK - free space: / 15170 MB (79% inode=94%):
+[1364927400] CURRENT SERVICE STATE: tama;TAMA Application;OK;HARD;1;HTTP OK: HTTP/1.1 200 OK - 4039 bytes in 0.013 second response time
+[1364927400] CURRENT SERVICE STATE: tama;Temporary Disk Space;OK;HARD;1;DISK OK - free space: /dev/shm 1916 MB (100% inode=99%):
+[1364927400] CURRENT SERVICE STATE: tama;Total Processes;OK;HARD;1;PROCS OK: 158 processes
+[1364927400] CURRENT SERVICE STATE: tama;Total Zombie Processes;OK;HARD;1;PROCS OK: 0 processes with STATE = Z
+[1364927400] CURRENT SERVICE STATE: tama;Users;OK;HARD;1;USERS OK - 0 users currently logged in
+[1364929787] Auto-save of retention data completed successfully.
+[1364933387] Auto-save of retention data completed successfully.
+[1364936987] Auto-save of retention data completed successfully.
+[1364940587] Auto-save of retention data completed successfully.
+[1364944187] Auto-save of retention data completed successfully.
+[1364947787] Auto-save of retention data completed successfully.
+[1364951387] Auto-save of retention data completed successfully.
+[1364954987] Auto-save of retention data completed successfully.
+[1364958587] Auto-save of retention data completed successfully.
+[1364962187] Auto-save of retention data completed successfully.
+[1364965787] Auto-save of retention data completed successfully.
+[1364969387] Auto-save of retention data completed successfully.
