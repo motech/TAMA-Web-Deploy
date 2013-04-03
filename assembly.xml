@@ -6,6 +6,15 @@
     <fileSets>
         <fileSet>
             <directory>${basedir}</directory>
+            <includes>
+                <include>artifacts/**</include>
+                <include>bootstrap/**</include>
+                <include>lib/**</include>
+                <include>properties/**</include>
+                <include>scripts/**</include>
+                <include>sql/**</include>
+                <include>*.xml</include>
+            </includes>
         </fileSet>
     </fileSets>
 </assembly>
