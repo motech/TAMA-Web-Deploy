@@ -11,7 +11,7 @@
         </layout>
     </appender>
 
-    <appender name="email" class="org.motechproject.tama.tools.logging.EmailAppender">
+    <appender name="email" class="org.motechproject.web.logger.EmailAppender">
         <param name="SMTPHost" value="gmail-smtp-in.l.google.com"/>
         <param name="From" value="balajin@thoughtworks.com"/>
         <param name="To" value="tamasupport@thoughtworks.com"/>
