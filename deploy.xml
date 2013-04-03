@@ -97,6 +97,10 @@
         <echo message="Done seeding audio files"/>
     </target>
 
+    <target name="drop.audio.seed">
+        <drop.couch.db couch.db.server="${couchdb.server}" couch.db.port="${couchdb.port}" db.name="couchdb.platform.cmslite.db.name"/>
+    </target>
+
     <target name="cache.audio.files.in.kookoo">
         <echo message="Caching audio files.."/>
         <java fork="false" classname="${cache.audio.files.main.class}">
@@ -214,7 +218,7 @@
             description="Deploy TAMA by 1) fetching artifact from hudson, 2) recreate tama-web couchdb database with seed data 3) clearing quartz mysql jobdatastore 4) set properties for war"/>
 
     <target name="deploy.tama.from.hudson.and.migrate.without.reset.db"
-            depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, load.seed.data, restart.tomcat"/>
+            depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, drop.audio.seed, load.seed.data, restart.tomcat"/>
 
     <target name="deploy.tama.from.hudson"
             depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, restart.tomcat"
