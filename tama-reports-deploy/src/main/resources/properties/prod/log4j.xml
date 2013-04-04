@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
     <appender name="production" class="org.apache.log4j.RollingFileAppender">
         <param value="/home/tamasuper/apache-tomcat-7.0.22/logs/tama-reports.log" name="File"/>
         <param name="Append" value="true"/>
@@ -11,16 +12,17 @@
             <param name="ConversionPattern" value="[%d{ISO8601}] [%c] [%p] [ThreadId:%t] - %m%n"/>
         </layout>
     </appender>
+
     <logger name="org.springframework">
         <level value="warn"/>
     </logger>
-    <logger name="org.motechproject">
-        <level value="info"/>
-    </logger>
+
     <logger name="org.motechproject">
         <level value="all"/>
+        <appender-ref ref="production"/>
         <appender-ref ref="adminEmail"/>
     </logger>
+
     <root>
         <priority value="warn"/>
         <appender-ref ref="production"/>
