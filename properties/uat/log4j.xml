@@ -3,7 +3,7 @@
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
     <appender class="org.apache.log4j.RollingFileAppender" name="logfile">
-        <param value="/home/tamasuper/apache-tomcat-7.0.22/logs/tama.log" name="File"/>
+        <param value="/home/tamasuper/apache-tomcat-7.0.22-primary/logs/tama.log" name="File"/>
         <param name="Append" value="true"/>
         <param name="MaxFileSize" value="4096KB"/>
         <param name="maxBackupIndex" value="5"/>
@@ -16,7 +16,7 @@
         <param name="SMTPHost" value="gmail-smtp-in.l.google.com"/>
         <param name="From" value="balajin@thoughtworks.com"/>
         <param name="To" value="tamasupport@thoughtworks.com"/>
-        <param name="Subject" value="TAMA Error from prod | "/>
+        <param name="Subject" value="TAMA Error from UAT | "/>
         <param name="BufferSize" value="50"/>
         <param name="threshold" value="error"/>
         <layout class="org.apache.log4j.PatternLayout">
