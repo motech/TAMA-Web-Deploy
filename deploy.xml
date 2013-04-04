@@ -59,7 +59,7 @@
         <echo message="Stopping tomcat..."/>
         <echo message="Waiting for tomcat to stop with tomcat home at ${tomcat.home}"/>
         <exec executable="/sbin/service" dir="${tomcat.home}">
-            <arg line="tomcat stop"/>
+            <arg line="${tomcat.service} stop"/>
         </exec>
         <waitfor checkevery="100" checkeveryunit="millisecond" maxwait="2" maxwaitunit="minute" timeoutproperty="tomcat.timeout">
             <not>
