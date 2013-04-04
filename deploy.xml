@@ -177,6 +177,8 @@
 				  file="${basedir}/properties/${env}/clinicianSMS.properties"/>
         <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
               file="${basedir}/properties/${env}/tamaReports.properties"/>
+        <copy overwrite="true" todir="${tomcat.home}/webapps/${app.name}/WEB-INF/classes"
+              file="${basedir}/properties/${env}/diagnostics.properties"/>
 		<antcall target="unwire.motech.delivery.tools"/>
     </target>
 
