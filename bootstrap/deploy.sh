@@ -16,10 +16,12 @@ wget http://$HUDSON_ADDRESS/view/tama/job/$HUDSON_JOB_NAME/lastSuccessfulBuild/T
 unzip TAMA-Web-Deploy-$DEPLOY_VERSION-bin.zip
 rm -rf TAMA-Web-Deploy-$DEPLOY_VERSION-bin.zip
 
+cd TAMA-Web-Deploy-$DEPLOY_VERSION
+
 #Prepare server
 if [ "$MIGRATE" = "true" ]; then
     sh scripts/version2/main.sh
 fi
 
-cd TAMA-Web-Deploy-$DEPLOY_VERSION && sudo ant $3 -f deploy.xml -Denv=$BUILD_ENV -Dbuild=$BUILD
+sudo ant $3 -f deploy.xml -Denv=$BUILD_ENV -Dbuild=$BUILD
 
