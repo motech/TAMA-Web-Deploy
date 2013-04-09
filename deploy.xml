@@ -122,27 +122,25 @@
         <foreach list="${couchdb.all.dbs}" target="drop.couch.db" param="dbname"/>
     </target>
 
-    <!-- *************************RECREATE MYSQL************************* -->
+    <!-- *************************RECREATE QUARTZ SCHEMA************************* -->
     <target name="load.quartz.schema">
+        <echo message="Quartz schema loading: START"/>
         <path id="dependencies">
-            <fileset file="./lib/mysql-connector-java-5.1.13.jar"/>
+            <fileset file="${project.basedir}/../build/lib/postgresql-9.1-901.jdbc4.jar"/>
         </path>
-        <sql driver="${mysql.driver}"
-             url="jdbc:mysql://${mysql.server}:${mysql.port}/${mysql.db.name}?autoReconnect=true"
-             userid="${mysql.user}"
+        <exec executable="dropdb" failonerror="false">
+            <arg line="-U ${postgres.user} ${postgres.db}"/>
+        </exec>
+        <exec executable="createdb">
+            <arg line="-U ${postgres.user} ${postgres.db}"/>
+        </exec>
+        <sql driver="${postgres.driver}"
+             url="jdbc:postgresql://${postgres.server}/${postgres.db}"
+             userid="${postgres.user}"
              classpathref="dependencies"
-             password="${mysql.password}">
-            drop database ${mysql.db.name};
-            create database ${mysql.db.name};
-        </sql>
-        <sql driver="${mysql.driver}"
-             url="jdbc:mysql://${mysql.server}:${mysql.port}/${mysql.db.name}?autoReconnect=true"
-             userid="${mysql.user}"
-             classpathref="dependencies"
-             password="${mysql.password}"
-             src="./sql/tables_mysql_innodb.sql">
-        </sql>
-        <echo message="recreated schema for ${mysql.db.name}"/>
+             password="${postgres.password}"
+             src="${project.basedir}/../build/sql/qrtz_tables.sql"/>
+        <echo message="Quartz schema loading: END"/>
     </target>
 
     <!-- *************************SET PROPERTIES************************* -->
@@ -217,7 +215,7 @@
     <!-- *************************DEPLOY TARGETS************************* -->
     <target name="deploy.tama.from.hudson.and.reset.db"
             depends="stop.tomcat, drop.all.dbs, load.quartz.schema, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, load.seed.data, restart.tomcat"
-            description="Deploy TAMA by 1) fetching artifact from hudson, 2) recreate tama-web couchdb database with seed data 3) clearing quartz mysql jobdatastore 4) set properties for war"/>
+            description="Deploy TAMA by 1) fetching artifact from hudson, 2) recreate tama-web couchdb database with seed data 3) clearing quartz  jobdatastore 4) set properties for war"/>
 
     <target name="deploy.tama.from.hudson.and.migrate.without.reset.db"
             depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, drop.audio.seed, load.seed.data, restart.tomcat"/>
