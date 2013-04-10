@@ -139,7 +139,7 @@
              userid="${postgres.user}"
              classpathref="dependencies"
              password="${postgres.password}"
-             src="${project.basedir}/../build/sql/quartz_tables.sql"/>
+             src="${project.basedir}/../sql/quartz_tables.sql"/>
         <echo message="Quartz schema loading: END"/>
     </target>
 
