@@ -126,7 +126,7 @@
     <target name="load.quartz.schema">
         <echo message="Quartz schema loading: START"/>
         <path id="dependencies">
-            <fileset file="${project.basedir}/../build/lib/postgresql-9.1-901.jdbc4.jar"/>
+            <fileset file="${project.basedir}/../lib/postgresql-9.1-901.jdbc4.jar"/>
         </path>
         <exec executable="dropdb" failonerror="false">
             <arg line="-U ${postgres.user} ${postgres.db}"/>
