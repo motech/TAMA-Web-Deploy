@@ -7,3 +7,6 @@ sh ./create_databases.sh
 cd "$(dirname "$0")"
 echo "Migrating Jobs..."
 sh ./migrate_jobs.sh
+cd "$(dirname "$0")"
+echo "Update Audio Files"
+sh ./update-audio-files.sh
