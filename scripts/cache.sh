@@ -1,15 +1,15 @@
 #!/bin/sh
 
-if [ ! "$#" -eq "2" ]
+if [ ! "$#" -eq "3" ]
 then
-   echo "Usage: ./cache.sh <path_to_TAMA-Web-Audio_folder> API_KEY"
-   echo "Example: ./cache.sh /home/motech/TAMA-Web-Audio apikey"
+   echo "Usage: ./cache.sh <path_to_TAMA-Web-Audio_folder> API_KEY HOST_NAME"
+   echo "Example: ./cache.sh /home/motech/TAMA-Web-Audio apikey hostname"
    exit 3
 fi
 
 KOOKOO_URL=http://kookoo.in/restkookoo/index.php/api/cache/audio
 KOOKOO_API_KEY=$2
-TAMA_HOSTNAME=tama.showcase.thoughtworks.com
+TAMA_HOSTNAME=$3
 
 cd $1;
 
