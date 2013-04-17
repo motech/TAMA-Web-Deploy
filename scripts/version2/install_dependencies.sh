@@ -17,6 +17,9 @@ wget https://raw.github.com/motech/motech-scm/master/bootstrap.sh
 echo "Installing..."
 sudo sh ./bootstrap.sh -c configuration.pp
 
+echo "Starting couchdb..."
+sudo service couchdb start
+
 echo "Starting postgres..."
 sudo service postgresql start
 

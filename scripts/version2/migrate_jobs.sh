@@ -23,11 +23,6 @@ perl mysql2pgsql.perl dump.sql dumppg.sql
 echo "Decoding hex..."
 sed "s/0x\([0-9,A-F]*\))/decode('\1','hex'))/g" dumppg.sql > dumppg_decoded.sql
 
-
-#create postgres db
-echo "Creating database...."
-sudo -u postgres createdb motechquartz;
-
 #Load schema
 echo "Loading Schema..."
 sudo -u postgres psql motechquartz < ../../sql/quartz_tables.sql
