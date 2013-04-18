@@ -5,7 +5,7 @@ BUILD=$2
 WORKING_DIR=/tmp/deployReports
 DEPLOY_VERSION=1.0-SNAPSHOT
 DEPLOY_TARGET=$3
-HUDSON_JOB_NAME=tama-reports-deploy
+HUDSON_JOB_NAME=tama-reports-deploy-1.01
 
 rm -rf $WORKING_DIR
 mkdir $WORKING_DIR
