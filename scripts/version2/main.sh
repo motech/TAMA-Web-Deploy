@@ -14,10 +14,6 @@ echo "Update Audio Files..."
 sh ./update-audio-files.sh
 
 cd "$(dirname "$0")"
-echo "Caching Audio files..."
-sh ../cache.sh /home/tamasuper/deploy/TAMA-Web-Audio KK3e4ce46d72c6bebe803d53be3e48947c tamaproject.in
-
-cd "$(dirname "$0")"
 echo "Enabling activemq management context..."
 sh ./enable-management-context.sh
 
