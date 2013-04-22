@@ -4,7 +4,7 @@
 
 ##--------------------------------SETTINGS--------------------------------------------
 ## Operating System
-$os = "centos5" ## [centos5 | centos6]
+$os = "centos6" ## [centos5 | centos6]
 $word = "32b" ## [32b,64b]
 $arch = "x64" ## [x64|i586]
 
