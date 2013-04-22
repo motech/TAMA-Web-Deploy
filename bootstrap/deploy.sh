@@ -25,3 +25,6 @@ fi
 
 sudo ant $3 -f deploy.xml -Denv=$BUILD_ENV -Dbuild=$BUILD
 
+echo "Caching Audio files..."
+sh scripts/cache.sh /home/tamasuper/deploy/TAMA-Web-Audio KK3e4ce46d72c6bebe803d53be3e48947c tamaproject.in
+
