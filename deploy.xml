@@ -220,6 +220,9 @@
     <target name="deploy.tama.from.hudson.and.migrate.without.reset.db"
             depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, drop.audio.seed, load.audio.seed, load.seed.data, restart.tomcat"/>
 
+    <target name="deploy.tama.from.hudson.and.reset.audio.data"
+            depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, drop.audio.seed, load.audio.seed, restart.tomcat"/>
+
     <target name="deploy.tama.from.hudson"
             depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, restart.tomcat"
             description="Deploy TAMA from hudson without recreating database and seed data"/>
