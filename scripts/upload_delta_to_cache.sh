@@ -11,6 +11,7 @@ then
    echo "Example: ./upload_delta_to_cache.sh /home/motech/TAMA-Web-Audio apikey hostname tama"
    exit 3
 fi
+cd $TAMA_WEB_AUDIO_PATH
 
 sha1=`git log --oneline -1 | awk '{print $1'}`
 
@@ -28,7 +29,6 @@ fi
 
 KOOKOO_URL=http://kookoo.in/restkookoo/index.php/api/cache/audio
 
-cd $TAMA_WEB_AUDIO_PATH
 for file in `git diff --name-only $sha1 $sha2`; do
     dir=${file%%\/*}
     wave_file_name=`basename $file |tr [A-Z] [a-z]`
