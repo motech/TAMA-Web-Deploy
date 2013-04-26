@@ -5,7 +5,7 @@
             "queryParameters": {
                 "phone_no": "$recipients" ,
                 "message": "$message" ,
-                "api_key": "<your api key>"
+                "api_key": "KK3e4ce46d72c6bebe803d53be3e48947c"
             }
         },
         "response": {
