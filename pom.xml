@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>TAMA-Web-Deploy</groupId>
     <artifactId>TAMA-Web-Deploy</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.01</version>
     <dependencies>
         <dependency>
             <groupId>org.motechproject</groupId>

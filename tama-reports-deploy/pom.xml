@@ -6,7 +6,7 @@
     <name>TAMA Reports Deploy</name>
 
     <groupId>org.motechproject.tama.reports</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.01</version>
     <artifactId>tama-reports-deploy</artifactId>
 
     <repositories>
@@ -73,7 +73,7 @@
         <dependency>
             <groupId>org.motechproject.tama.reports</groupId>
             <artifactId>tama-reports-migration</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.01</version>
         </dependency>
         <dependency>
             <groupId>postgresql</groupId>
