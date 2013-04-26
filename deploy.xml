@@ -180,6 +180,23 @@
 		<antcall target="unwire.motech.delivery.tools"/>
     </target>
 
+    <target name="update.mq">
+        <echo message="Update mq is set to ${should.update.mq}"/>
+        <if>
+            <equals arg1="${should.update.mq}" arg2="true"/>
+            <then>
+                <mkdir dir="${activemq.lib}"/>
+                <copy todir="${activemq.lib}">
+                    <fileset dir="${tomcat.home}/webapps/${app.name}/WEB-INF/lib" includes="**/*.jar" excludes="**/*activemq*.jar"/>
+                </copy>
+                <exec executable="/sbin/service">
+                    <arg value="activemq"/>
+                    <arg value="restart"/>
+                </exec>
+            </then>
+        </if>
+    </target>
+
     <target name="unwire.motech.delivery.tools">
         <if>
             <equals arg1="${with.tools}" arg2="true" />
@@ -214,25 +231,25 @@
 
     <!-- *************************DEPLOY TARGETS************************* -->
     <target name="deploy.tama.from.hudson.and.reset.db"
-            depends="stop.tomcat, drop.all.dbs, load.quartz.schema, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, load.seed.data, restart.tomcat"
+            depends="stop.tomcat, drop.all.dbs, load.quartz.schema, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, update.mq, load.seed.data, restart.tomcat"
             description="Deploy TAMA by 1) fetching artifact from hudson, 2) recreate tama-web couchdb database with seed data 3) clearing quartz  jobdatastore 4) set properties for war"/>
 
     <target name="deploy.tama.from.hudson.and.migrate.without.reset.db"
-            depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, drop.audio.seed, load.audio.seed, load.seed.data, restart.tomcat"/>
+            depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, update.mq, drop.audio.seed, load.audio.seed, load.seed.data, restart.tomcat"/>
 
     <target name="deploy.tama.from.hudson.and.reset.audio.data"
             depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, drop.audio.seed, load.audio.seed, restart.tomcat"/>
 
     <target name="deploy.tama.from.hudson"
-            depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, restart.tomcat"
+            depends="stop.tomcat, download.tama.from.hudson, copy.tama.to.tomcat, start.tomcat, set.properties, update.mq, restart.tomcat"
             description="Deploy TAMA from hudson without recreating database and seed data"/>
 
     <target name="deploy.tama.from.local.and.reset.db"
-            depends="stop.tomcat, drop.all.dbs, load.quartz.schema, copy.local.war, start.tomcat, set.properties, load.seed.data, restart.tomcat"
+            depends="stop.tomcat, drop.all.dbs, load.quartz.schema, copy.local.war, start.tomcat, set.properties, update.mq, load.seed.data, restart.tomcat"
             description="Deploy TAMA from locally downloaded war(set 'local.war.file' in deploy.properties) in artifacts folder. Also recreates the TAMA database."/>
 
     <target name="deploy.tama.from.local"
-            depends="stop.tomcat, copy.local.war, start.tomcat, set.properties, restart.tomcat"
+            depends="stop.tomcat, copy.local.war, start.tomcat, set.properties, update.mq, restart.tomcat"
             description="Deploy TAMA from locally downloaded war(set 'local.war.file' in deploy.properties) in artifacts folder without recreating database and seed data"/>
 
 </project>

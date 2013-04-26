@@ -18,6 +18,14 @@ echo "Enabling activemq management context..."
 sh ./enable-management-context.sh
 
 cd "$(dirname "$0")"
+echo "Removing old messages..."
+sh ./remove_mq_messages.sh
+
+cd "$(dirname "$0")"
+echo "Updating kahadb logging..."
+sh ./set_kahadb_props.sh
+
+cd "$(dirname "$0")"
 echo "Adding postgres to auto start..."
 chkconfig --add postgresql-9.1
 
