@@ -22,6 +22,10 @@ echo "Removing old messages..."
 sh ./remove_mq_messages.sh
 
 cd "$(dirname "$0")"
+echo "Resetting couch..."
+sh ./drop_couch_data.sh
+
+cd "$(dirname "$0")"
 echo "Updating kahadb logging..."
 sh ./set_kahadb_props.sh
 
