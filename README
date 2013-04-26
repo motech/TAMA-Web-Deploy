@@ -1,7 +1,7 @@
 To install TAMA, run
 
-wget https://raw.github.com/motech/TAMA-Web-Deploy/master/bootstrap/deploy.sh && sh deploy.sh <your_params>
+wget https://raw.github.com/motech/TAMA-Web-Deploy/version-1.01/bootstrap/deploy.sh && sh deploy.sh <your_params>
 
 To install TAMA reports, run
 
-wget https://raw.github.com/motech/TAMA-Web-Deploy/master/bootstrap/deployReports.sh && sh deployReports.sh <your_params>
+wget https://raw.github.com/motech/TAMA-Web-Deploy/version-1.01/bootstrap/deployReports.sh && sh deployReports.sh <your_params>
