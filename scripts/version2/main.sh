@@ -1,38 +1,40 @@
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 echo "Stopping the application..."
 sudo service tomcat stop
 
-cd "$(dirname "$0")"
+cd $DIR
 echo "Installing dependencies..."
 sh ./install_dependencies.sh
 
-cd "$(dirname "$0")"
+cd $DIR
 echo "Creating databases..."
 sh ./create_databases.sh
 
-cd "$(dirname "$0")"
+cd $DIR
 echo "Update Audio Files..."
 sh ./update-audio-files.sh
 
-cd "$(dirname "$0")"
+cd $DIR
 echo "Enabling activemq management context..."
 sh ./enable-management-context.sh
 
-cd "$(dirname "$0")"
+cd $DIR
 echo "Removing old messages..."
 sh ./remove_mq_messages.sh
 
-cd "$(dirname "$0")"
+cd $DIR
 echo "Resetting couch..."
 sh ./drop_couch_data.sh
 
-cd "$(dirname "$0")"
+cd $DIR
 echo "Updating kahadb logging..."
 sh ./set_kahadb_props.sh
 
-cd "$(dirname "$0")"
+cd $DIR
 echo "Adding postgres to auto start..."
 chkconfig --add postgresql-9.1
 
-cd "$(dirname "$0")"
+cd $DIR
 echo "Setting shm vars..."
 sh ./set_shm_opts.sh
