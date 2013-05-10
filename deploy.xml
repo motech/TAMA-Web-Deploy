@@ -98,7 +98,7 @@
     </target>
 
     <target name="drop.audio.seed">
-        <drop.couch.db couch.db.server="${couchdb.server}" couch.db.port="${couchdb.port}" db.name="couchdb.platform.cmslite.db.name"/>
+        <drop.couch.db couch.db.server="${couchdb.server}" couch.db.port="${couchdb.port}" db.name="${couchdb.platform.cmslite.db.name}"/>
     </target>
 
     <target name="cache.audio.files.in.kookoo">
