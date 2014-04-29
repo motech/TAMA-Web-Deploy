@@ -14,8 +14,8 @@
 
     <appender name="email" class="org.motechproject.web.logger.EmailAppender">
         <param name="SMTPHost" value="gmail-smtp-in.l.google.com"/>
-        <param name="From" value="balajin@thoughtworks.com"/>
-        <param name="To" value="tamasupport@thoughtworks.com"/>
+        <param name="From" value="motech-support@beehyv.in"/>
+        <param name="To" value="motech-support@beehyv.in"/>
         <param name="Subject" value="TAMA Error from prod | "/>
         <param name="BufferSize" value="50"/>
         <param name="threshold" value="error"/>

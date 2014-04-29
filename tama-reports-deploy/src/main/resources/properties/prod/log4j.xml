@@ -31,8 +31,8 @@
     <appender name="adminEmail" class="org.motechproject.web.logger.EmailAppender">
         <param name="BufferSize" value="512"/>
         <param name="SMTPHost" value="gmail-smtp-in.l.google.com"/>
-        <param name="From" value="motech.ivr@thoughtworks.com"/>
-        <param name="To" value="tamasupport@thoughtworks.com"/>
+        <param name="From" value="motech-support@beehyv.in"/>
+        <param name="To" value="motech-support@beehyv.in"/>
         <param name="Subject" value="TAMA Reports Error from Prod | "/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
